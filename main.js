@@ -1,5 +1,4 @@
 const { app, BrowserWindow } = require('electron');
-const path = require('path');
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -15,8 +14,8 @@ function createWindow() {
     }
   });
 
-  // Load our single-file ERP system
-  mainWindow.loadFile('index.html');
+  // 🌐 LIVE CLOUD AUTO-SYNC (ඔබ Code එක වෙනස් කළ සැණින් සියලු PC වල Update වේ)
+  mainWindow.loadURL('https://akilaprasannajagoda-sys.github.io/SystemsLK-RMS/');
 }
 
 app.whenReady().then(createWindow);
