@@ -15,6 +15,8 @@
 
     <!-- PAYHERE PAYMENT GATEWAY SDK -->
     <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
+    <!-- MD5 CRYPTO FOR PAYHERE SECURITY HASH -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
     <style>
         :root {
@@ -1965,7 +1967,7 @@
             document.getElementById("planYearly").style.background = (type === 'yearly') ? "#fff7ed" : "#fff";
         }
 
-        // --- PAYMENT GATEWAY INTEGRATION (HELAPAY / PAYHERE) ---
+        // --- PAYMENT GATEWAY INTEGRATION (HELAPAY & PAYHERE SANDBOX HASH ENGINE) ---
         function triggerSubscriptionPayment() {
             if (window.HelaPay) {
                 triggerHelaPayCheckout();
@@ -1974,10 +1976,25 @@
             }
         }
 
+        function generatePayHereHash(merchantId, merchantSecret, orderId, amount, currency) {
+            let hashedSecret = CryptoJS.MD5(merchantSecret).toString().toUpperCase();
+            let amountFormatted = parseFloat(amount).toLocaleString('en-us', { minimumFractionDigits: 2 }).replaceAll(',', '');
+            let hash = CryptoJS.MD5(merchantId + orderId + amountFormatted + currency + hashedSecret).toString().toUpperCase();
+            return hash;
+        }
+
         function triggerPayHereCheckout() {
             const isMonthly = (selectedPlan === 'monthly');
             const paymentAmount = isMonthly ? 4500.00 : 45000.00;
             const planTitle = isMonthly ? "Grand Ceylon ERP - Monthly Subscription" : "Grand Ceylon ERP - Annual Subscription";
+            const orderId = "SUB_" + Date.now();
+
+            // 🔐 YOUR PAYHERE SANDBOX CREDENTIALS
+            const merchantId = "1237676"; // 👈 ඔබගේ Settings වල ඇති 7-digit Merchant ID එක දමන්න (උදා: 1224567)
+            const merchantSecret = "MzUzNzI0NDU3MjI1Njk3MTI1MDcxNzQ0MzczMTQ5MzkxNzEyODc2OQ==";
+
+            // Generate PayHere MD5 Security Hash
+            const securityHash = generatePayHereHash(merchantId, merchantSecret, orderId, paymentAmount, "LKR");
 
             payhere.onCompleted = function onCompleted(orderId) {
                 activateAccountManually();
@@ -1993,15 +2010,15 @@
 
             const payment = {
                 sandbox: true,
-                merchant_id: "1211149",
+                merchant_id: merchantId,
                 return_url: window.location.href,
                 cancel_url: window.location.href,
                 notify_url: "https://your-domain.com/notify",
-                order_id: "SUB_" + Date.now(),
+                order_id: orderId,
                 items: planTitle,
                 amount: paymentAmount.toFixed(2),
                 currency: "LKR",
-                hash: "",
+                hash: securityHash,
                 first_name: RMS.settings.name || "Hotel Owner",
                 last_name: "Manager",
                 email: currentUser ? currentUser.email : "client@example.com",
@@ -3955,7 +3972,7 @@
                     <tr>
                         <td><b>${r.roomNo}</b></td>
                         <td><b style="color:${r.status==='available'?'var(--success)':(r.status==='occupied'?'var(--danger)':'var(--warning)')};">${r.status.toUpperCase()}</b></td>
-                        <td>${r.cleaner || '-'} </td>
+                        <td>${r.cleaner || '-'}</td>
                         <td>${r.cleanedAt || '-'}</td>
                         <td>${actionBtn}</td>
                     </tr>
@@ -4069,7 +4086,8 @@
                         shiftId: RMS.settings.currentShiftId,
                         date: new Date(getTrueServerTime()).toLocaleString(),
                         category: "Sales Refund",
-                        desc: `Refund on ${inv.invoiceNo} - ${reason}`, amount: inv.grand,
+                        desc: `Refund on ${inv.invoiceNo} - ${reason}`,
+                        amount: inv.grand,
                         staff: activeStaff.name
                     });
 
@@ -5530,4 +5548,4 @@
     </script>
 </body>
 </html>
-                        
+                      
