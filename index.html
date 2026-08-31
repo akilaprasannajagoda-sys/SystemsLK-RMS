@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +34,10 @@
         
         @media print {
             body * { visibility: hidden; }
-            #thermal-receipt, #thermal-receipt * { visibility: visible; }
+            #thermal-receipt, #thermal-receipt * { 
+                visibility: visible !important; 
+                display: block !important;
+            }
             #thermal-receipt {
                 position: absolute;
                 left: 0;
@@ -42,7 +46,8 @@
                 font-family: 'Courier New', Courier, monospace;
                 color: black !important;
                 background: white !important;
-                padding: 5px;
+                padding: 4px;
+                display: block !important;
             }
         }
         .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -87,25 +92,25 @@
         </div>
 
         <!-- COLLAPSIBLE ENTERPRISE SIDEBAR -->
-        <aside class="w-20 lg:w-64 bg-dark-900 border-r border-slate-800 flex flex-col justify-between transition-all duration-300 z-30">
+        <aside class="w-16 sm:w-20 lg:w-64 bg-dark-900 border-r border-slate-800 flex flex-col justify-between transition-all duration-300 z-30 flex-shrink-0">
             <div>
                 <div class="h-16 flex items-center justify-center lg:justify-start lg:px-6 gap-3 border-b border-slate-800 bg-dark-950/50">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 flex-shrink-0">
                         <i class="fa-solid fa-utensils text-white text-lg"></i>
                     </div>
                     <div class="hidden lg:block">
                         <h1 class="font-extrabold text-base tracking-tight text-white">APEX<span class="text-emerald-400">RESTRO</span></h1>
-                        <span class="text-[10px] uppercase tracking-widest text-emerald-500 font-bold">MULTI-TENANT v6.0</span>
+                        <span class="text-[10px] uppercase tracking-widest text-emerald-500 font-bold">ENTERPRISE v7.0</span>
                     </div>
                 </div>
 
-                <nav class="p-3 space-y-1.5">
+                <nav class="p-2 sm:p-3 space-y-1.5">
                     <button v-for="menu in accessibleMenus" :key="menu.id" @click="activeTab = menu.id"
                         :class="activeTab === menu.id ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'"
-                        class="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group">
-                        <i :class="menu.icon" class="text-lg w-6 text-center group-hover:scale-110 transition-transform"></i>
-                        <span class="hidden lg:inline">{{ menu.name }}</span>
-                        <span v-if="menu.badge && getBadgeCount(menu.id)" class="hidden lg:inline-flex ml-auto text-xs px-2 py-0.5 rounded-full font-bold bg-rose-500 text-white animate-pulse">
+                        class="w-full flex items-center justify-center lg:justify-start gap-3 px-2 sm:px-3.5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group">
+                        <i :class="menu.icon" class="text-base sm:text-lg w-6 text-center group-hover:scale-110 transition-transform flex-shrink-0"></i>
+                        <span class="hidden lg:inline text-xs sm:text-sm font-bold">{{ menu.name }}</span>
+                        <span v-if="menu.badge && getBadgeCount(menu.id)" class="hidden lg:inline-flex ml-auto text-[10px] px-2 py-0.5 rounded-full font-black bg-rose-500 text-white animate-pulse">
                             {{ getBadgeCount(menu.id) }}
                         </span>
                     </button>
@@ -113,11 +118,11 @@
             </div>
 
             <!-- Terminal Info & Client Store ID Display -->
-            <div class="p-3 border-t border-slate-800 bg-dark-950/40">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-emerald-400 font-bold">
-                            {{ currentUser.name.charAt(0) }}
+            <div class="p-2 sm:p-3 border-t border-slate-800 bg-dark-950/40">
+                <div class="flex items-center justify-center lg:justify-between">
+                    <div class="flex items-center gap-2.5 overflow-hidden">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-emerald-400 font-bold text-xs sm:text-sm flex-shrink-0">
+                            {{ (currentUser.name || 'A').charAt(0) }}
                         </div>
                         <div class="hidden lg:block overflow-hidden">
                             <p class="text-xs font-bold truncate text-slate-200">{{ currentUser.name }}</p>
@@ -135,68 +140,87 @@
         </aside>
 
         <!-- WORKSPACE AREA -->
-        <div class="flex-1 flex flex-col h-full overflow-hidden bg-slate-900/50">
+        <div class="flex-1 flex flex-col h-full overflow-hidden bg-slate-900/50 min-w-0">
             
             <!-- TOP BAR -->
-            <header class="h-16 border-b border-slate-800 px-6 flex items-center justify-between bg-dark-900/80 backdrop-blur-md">
-                <div class="flex items-center gap-4">
-                    <h2 class="text-lg font-bold text-slate-100 uppercase tracking-wide flex items-center gap-2">
+            <header class="h-16 border-b border-slate-800 px-4 sm:px-6 flex items-center justify-between bg-dark-900/80 backdrop-blur-md flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <h2 class="text-sm sm:text-lg font-black text-slate-100 uppercase tracking-wide flex items-center gap-2">
                         <i :class="currentMenuIcon" class="text-emerald-400"></i> {{ activeTabName }}
                     </h2>
-                    <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full hidden sm:inline-block font-semibold">
-                        <i class="fa-solid fa-store mr-1"></i> Client ID: {{ restaurantId }}
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full hidden md:inline-block font-semibold">
+                        <i class="fa-solid fa-store mr-1"></i> ID: {{ restaurantId }}
                     </span>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 sm:gap-3">
                     <div class="text-right hidden sm:block">
-                        <div class="text-xs text-slate-400">Client Revenue</div>
-                        <div class="text-sm font-black text-emerald-400">Rs. {{ formatNumber(financials.grossSales) }}</div>
+                        <div class="text-[10px] text-slate-400">Client Revenue</div>
+                        <div class="text-xs sm:text-sm font-black text-emerald-400">Rs. {{ formatNumber(financials.grossSales) }}</div>
                     </div>
-                    <button @click="openShiftModal" class="bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/20 px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-receipt"></i> Close Shift (Z-Report)
+                    <button @click="openShiftModal" class="bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/20 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-receipt"></i> <span class="hidden sm:inline">Close Shift</span> (Z-Report)
                     </button>
                 </div>
             </header>
 
-            <!-- VIEWPORT -->
-            <main class="flex-1 overflow-hidden p-4 lg:p-6">
+            <!-- VIEWPORT (100% RESPONSIVE MAIN CONTAINER) -->
+            <main class="flex-1 overflow-y-auto custom-scroll p-2.5 sm:p-4 lg:p-6 flex flex-col min-h-0">
                 
                 <!-- ================= TAB 1: POS / BILLING ================= -->
-                <div v-if="activeTab === 'pos'" class="h-full flex flex-col lg:flex-row gap-4 overflow-hidden">
-                    <div class="flex-1 flex flex-col h-full overflow-hidden bg-dark-900 border border-slate-800 rounded-2xl p-4">
-                        <div class="flex flex-col sm:flex-row gap-3 justify-between items-center mb-4">
-                            <div class="relative w-full sm:w-72">
-                                <i class="fa-solid fa-search absolute left-3.5 top-3 text-slate-500 text-sm"></i>
-                                <input v-model="searchQuery" type="text" placeholder="Search dish..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">
+                <div v-if="activeTab === 'pos'" class="h-full flex flex-col lg:flex-row gap-4 relative flex-1 min-h-0">
+                    
+                    <!-- Product Selection -->
+                    <div class="flex-1 flex flex-col h-full bg-dark-900 border border-slate-800 rounded-2xl p-3 sm:p-4 overflow-hidden">
+                        
+                        <!-- Mobile Quick Bar -->
+                        <div class="flex lg:hidden justify-between items-center mb-3 bg-slate-950 p-2 rounded-xl border border-slate-800 text-xs">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[10px] uppercase font-bold text-slate-400">Mode:</span>
+                                <select v-model="orderType" class="bg-dark-900 text-emerald-400 font-black rounded-lg px-2 py-1 border border-slate-800">
+                                    <option v-for="type in activeOrderTypes" :key="type" :value="type">{{ type }}</option>
+                                </select>
                             </div>
-                            <div class="flex gap-2 overflow-x-auto w-full custom-scroll pb-1">
+                            <div v-if="orderType === 'Dine-In'" class="flex items-center gap-1.5">
+                                <span class="text-[10px] uppercase font-bold text-slate-400">Table:</span>
+                                <select v-model="currentTable" class="bg-dark-900 text-white font-black rounded-lg px-2 py-1 border border-slate-800">
+                                    <option value="">Select</option>
+                                    <option v-for="t in tables" :key="t.id" :value="t.name">{{ t.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Search & Categories -->
+                        <div class="flex flex-col sm:flex-row gap-2 justify-between items-center mb-3">
+                            <div class="relative w-full sm:w-72">
+                                <i class="fa-solid fa-search absolute left-3.5 top-2.5 text-slate-500 text-xs"></i>
+                                <input v-model="searchQuery" type="text" placeholder="Search dishes..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
+                            </div>
+                            <div class="flex gap-1.5 overflow-x-auto w-full custom-scroll pb-1">
                                 <button @click="selectedCategory = 'All'"
-                                    :class="selectedCategory === 'All' ? 'bg-emerald-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400 hover:text-white'"
-                                    class="px-4 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
+                                    :class="selectedCategory === 'All' ? 'bg-emerald-500 text-slate-950 font-black' : 'bg-slate-950 text-slate-400 border border-slate-800'"
+                                    class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
                                     All
                                 </button>
                                 <button v-for="cat in categories" :key="cat" @click="selectedCategory = cat"
-                                    :class="selectedCategory === cat ? 'bg-emerald-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400 hover:text-white'"
-                                    class="px-4 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
+                                    :class="selectedCategory === cat ? 'bg-emerald-500 text-slate-950 font-black' : 'bg-slate-950 text-slate-400 border border-slate-800'"
+                                    class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
                                     {{ cat }}
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Products Grid -->
-                        <div class="flex-1 overflow-y-auto custom-scroll grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 pr-1">
+                        <!-- Product Grid -->
+                        <div class="flex-1 overflow-y-auto custom-scroll grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-2.5 pb-20 lg:pb-2 pr-1">
                             <div v-for="p in filteredProducts" :key="p.id" @click="addToCart(p)"
-                                class="bg-slate-950 border border-slate-800 hover:border-emerald-500/50 rounded-2xl p-3 flex flex-col justify-between cursor-pointer group transition-all duration-200 hover:shadow-xl hover:shadow-emerald-950/30">
+                                class="bg-slate-950 border border-slate-800 hover:border-emerald-500/50 rounded-2xl p-3 flex flex-col justify-between cursor-pointer active:scale-95 transition-all shadow-md">
                                 <div>
-                                    <div class="flex justify-between items-start mb-2">
-                                        <span class="text-[10px] font-bold px-2 py-0.5 bg-slate-900 border border-slate-800 rounded-md text-emerald-400">{{ p.category }}</span>
-                                    </div>
-                                    <h3 class="font-bold text-sm text-slate-200 group-hover:text-emerald-400 transition-colors line-clamp-2">{{ p.name }}</h3>
-                                    <p class="text-xs text-slate-500 mt-0.5">{{ p.portion }}</p>
+                                    <span class="text-[9px] font-bold px-2 py-0.5 bg-dark-900 border border-slate-800 rounded-md text-emerald-400">{{ p.category }}</span>
+                                    <h3 class="font-bold text-xs sm:text-sm text-slate-200 mt-1.5 line-clamp-2">{{ p.name }}</h3>
+                                    <p class="text-[10px] text-slate-500">{{ p.portion }}</p>
                                 </div>
-                                <div class="mt-4 flex justify-between items-center pt-2 border-t border-slate-900">
-                                    <span class="text-sm font-extrabold text-white">Rs. {{ formatNumber(p.price) }}</span>
-                                    <div class="w-7 h-7 rounded-lg bg-slate-900 group-hover:bg-emerald-500 group-hover:text-dark-950 text-slate-400 flex items-center justify-center text-xs transition">
+                                <div class="mt-3 flex justify-between items-center pt-2 border-t border-slate-900">
+                                    <span class="text-xs sm:text-sm font-black text-white">Rs. {{ formatNumber(p.price) }}</span>
+                                    <div class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs">
                                         <i class="fa-solid fa-plus"></i>
                                     </div>
                                 </div>
@@ -204,44 +228,134 @@
                         </div>
                     </div>
 
+                    <!-- Mobile Floating Cart Button -->
+                    <div v-if="cart.length > 0 && !showMobileCart" class="lg:hidden fixed bottom-4 left-4 right-4 z-40">
+                        <button @click="showMobileCart = true" class="w-full bg-emerald-500 text-dark-950 p-3.5 rounded-2xl font-black text-xs flex justify-between items-center shadow-2xl border border-emerald-400 animate-bounce">
+                            <div class="flex items-center gap-2">
+                                <span class="bg-dark-950 text-emerald-400 px-2 py-0.5 rounded-lg text-xs font-bold">{{ cart.reduce((s, i) => s + i.qty, 0) }} Items</span>
+                                <span>View Table Bill</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 text-sm">
+                                <span>Rs. {{ formatNumber(finalPayable) }}</span>
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </div>
+                        </button>
+                    </div>
+
                     <!-- Cart Panel -->
-                    <div class="w-full lg:w-[420px] bg-dark-900 border border-slate-800 rounded-2xl flex flex-col h-full overflow-hidden shadow-2xl">
-                        <div class="p-4 border-b border-slate-800 bg-slate-950/60">
-                            <div class="flex gap-2 mb-3">
-                                <button v-for="type in activeOrderTypes" :key="type" @click="orderType = type"
-                                    :class="orderType === type ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20' : 'bg-slate-900 text-slate-400 border border-slate-800'"
-                                    class="flex-1 py-1.5 rounded-xl text-xs transition">
+                    <div :class="showMobileCart ? 'fixed inset-0 z-50 bg-dark-950/95 flex flex-col p-4' : 'hidden lg:flex lg:w-[400px] lg:flex-col'" 
+                        class="bg-dark-900 border border-slate-800 rounded-2xl h-full overflow-hidden shadow-2xl flex-shrink-0">
+                        
+                        <div class="p-3.5 border-b border-slate-800 bg-slate-950/60 flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-receipt text-emerald-400"></i>
+                                <span class="text-xs font-black text-white uppercase">{{ orderType }} {{ currentTable ? '(' + currentTable + ')' : '' }}</span>
+                            </div>
+                            <button v-if="showMobileCart" @click="showMobileCart = false" class="lg:hidden text-slate-400 hover:text-white p-1 text-base">
+                                <i class="fa-solid fa-chevron-down"></i> Close
+                            </button>
+                        </div>
+
+                      <!-- Universal Order Type & CRM Selector (Desktop & Mobile Visible) -->
+                        <div class="p-3 border-b border-slate-800 bg-slate-950/60 space-y-2.5">
+                            <div class="flex gap-2">
+                                <button v-for="type in activeOrderTypes" :key="type" @click="setOrderType(type)"
+                                    :class="orderType === type ? 'bg-emerald-500 text-dark-950 font-black shadow-md' : 'bg-slate-900 text-slate-400 border border-slate-800'"
+                                    class="flex-1 py-2 rounded-xl text-xs transition">
+                                    <i :class="type === 'Dine-In' ? 'fa-solid fa-chair' : (type === 'Takeaway' ? 'fa-solid fa-bag-shopping' : 'fa-solid fa-motorcycle')"></i>
                                     {{ type }}
                                 </button>
                             </div>
-                            <div v-if="orderType === 'Dine-In'" class="flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <label class="text-xs text-slate-400">Table:</label>
-                                    <select v-model="currentTable" class="bg-slate-900 border border-slate-800 text-xs rounded-lg px-2.5 py-1 text-slate-200 font-bold focus:outline-none focus:border-emerald-500">
-                                        <option value="">Select Table</option>
-                                        <option v-for="t in tables" :key="t.id" :value="t.name">{{ t.name }} ({{ t.status }})</option>
-                                    </select>
+
+                            <!-- Dine-In Table Selector -->
+                            <div v-if="orderType === 'Dine-In'" class="flex justify-between items-center bg-slate-900/80 p-2 rounded-xl border border-slate-800">
+                                <label class="text-xs text-slate-300 font-bold">Select Table:</label>
+                                <select v-model="currentTable" class="bg-slate-950 border border-slate-700 text-xs rounded-lg px-3 py-1.5 text-emerald-400 font-black">
+                                    <option value="">-- Choose Table --</option>
+                                    <option v-for="t in tables" :key="t.id" :value="t.name">{{ t.name }} ({{ t.status }})</option>
+                                </select>
+                            </div>
+
+                            <!-- Takeaway & Delivery Customer Details Input Box -->
+                            <div v-if="orderType !== 'Dine-In'" class="bg-slate-900 p-3 rounded-2xl border border-amber-500/30 space-y-2 shadow-inner">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="font-extrabold text-amber-400 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-user-tag"></i> {{ orderType }} Customer Details
+                                    </span>
+                                    <button v-if="customer.phone" @click="clearCustomer" class="text-rose-400 hover:text-rose-300 text-[11px] font-bold">
+                                        <i class="fa-solid fa-xmark"></i> Clear
+                                    </button>
                                 </div>
-                                <span class="text-xs font-mono text-slate-400">Live POS</span>
+
+                                <!-- Phone Auto Search -->
+                                <div class="relative">
+                                    <i class="fa-solid fa-phone absolute left-3 top-2.5 text-slate-500 text-xs"></i>
+                                    <input v-model="customer.phone" @input="onPhoneSearch" type="tel" placeholder="Customer Phone (e.g. 0771234567)" 
+                                        class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-8 pr-3 py-1.5 text-xs text-emerald-400 font-bold focus:outline-none focus:border-emerald-500">
+                                    
+                                    <!-- Autocomplete Dropdown -->
+                                    <div v-if="customerMatches.length > 0" class="absolute left-0 right-0 top-full mt-1 bg-dark-950 border border-emerald-500/40 rounded-xl shadow-2xl z-30 max-h-44 overflow-y-auto custom-scroll">
+                                        <div v-for="c in customerMatches" :key="c.phone" @click="selectCustomer(c)"
+                                            class="p-2.5 hover:bg-slate-800 cursor-pointer border-b border-slate-800 text-xs flex justify-between items-center">
+                                            <div>
+                                                <div class="font-bold text-white flex items-center gap-1">
+                                                    <i class="fa-solid fa-user text-emerald-400 text-[10px]"></i> {{ c.name }}
+                                                </div>
+                                                <div class="text-[10px] text-slate-400">{{ c.phone }} • {{ c.address || c.landmark || 'No Address' }}</div>
+                                            </div>
+                                            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold">Select</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input v-model="customer.name" type="text" placeholder="Customer Name *" 
+                                        class="bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 focus:border-emerald-500 font-semibold">
+                                    <input v-model="customer.landmark" type="text" placeholder="Area / Landmark" 
+                                        class="bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 focus:border-emerald-500">
+                                </div>
+
+                                <textarea v-if="orderType === 'Delivery'" v-model="customer.address" rows="2" placeholder="Delivery Address for Rider (ලිපිනය)..." 
+                                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-amber-300 font-medium focus:border-emerald-500 custom-scroll"></textarea>
                             </div>
                         </div>
 
-                        <!-- Line Items -->
-                        <div class="flex-1 overflow-y-auto custom-scroll p-4 space-y-2.5">
+                        <!-- Items List -->
+                        <div class="flex-1 overflow-y-auto custom-scroll p-3 space-y-2">
                             <div v-if="cart.length === 0" class="h-full flex flex-col items-center justify-center text-slate-600">
-                                <i class="fa-solid fa-receipt text-5xl mb-3 opacity-30"></i>
-                                <p class="text-sm font-medium">කූඩය හිස්ව පවතී</p>
+                                <i class="fa-solid fa-utensils text-4xl mb-2 opacity-30"></i>
+                                <p class="text-xs font-medium">කූඩය හිස්ව පවතී (Empty Cart)</p>
                             </div>
-                            <div v-for="(item, idx) in cart" :key="idx" class="bg-slate-950 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-2">
+                            <div v-for="(item, idx) in cart" :key="idx" 
+                                class="border rounded-xl p-2.5 flex items-center justify-between gap-2 transition-all"
+                                :class="item.isFired ? 'bg-slate-950/80 border-slate-800' : 'bg-amber-500/5 border-amber-500/30 shadow-sm shadow-amber-500/10'">
                                 <div class="flex-1 min-w-0">
-                                    <h4 class="text-xs font-bold text-slate-200 truncate">{{ item.name }}</h4>
-                                    <div class="text-[11px] text-slate-400">Rs. {{ formatNumber(item.price) }} x {{ item.qty }} = <span class="text-emerald-400 font-bold">Rs. {{ formatNumber(item.price * item.qty) }}</span></div>
+                                    <div class="flex items-center gap-1.5 mb-0.5">
+                                        <span v-if="item.isFired" class="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-1.5 py-0.2 rounded font-black uppercase">
+                                            <i class="fa-solid fa-fire-burner mr-0.5"></i> Cooking
+                                        </span>
+                                        <span v-else class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.2 rounded font-black uppercase animate-pulse">
+                                            ● New
+                                        </span>
+                                        <div class="flex items-center gap-1">
+                                            <h4 class="text-xs font-bold text-slate-200 truncate">{{ item.name }}</h4>
+                                            <button @click="openItemNoteModal(item)" class="text-[10px] text-slate-400 hover:text-amber-400 p-0.5" title="Add Cooking Instruction">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div v-if="item.note" class="text-[10px] text-amber-300 italic bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 my-0.5 flex items-center gap-1">
+                                        <i class="fa-solid fa-comment-dots text-[9px]"></i> {{ item.note }}
+                                    </div>
+                                    <div class="text-[11px] text-slate-400">
+                                        Rs. {{ formatNumber(item.price) }} x {{ item.qty }} = <span class="text-emerald-400 font-bold">Rs. {{ formatNumber(item.price * item.qty) }}</span>
+                                    </div>
                                 </div>
-                                <div class="flex items-center gap-1.5">
-                                    <button @click="adjustQty(item, -1)" class="w-6 h-6 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 flex items-center justify-center text-xs font-bold">-</button>
-                                    <span class="w-6 text-center text-xs font-bold">{{ item.qty }}</span>
-                                    <button @click="adjustQty(item, 1)" class="w-6 h-6 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 flex items-center justify-center text-xs font-bold">+</button>
-                                    <button @click="requestItemVoid(idx, item)" class="w-6 h-6 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white flex items-center justify-center text-xs ml-1 transition" title="Secure Void">
+                                <div class="flex items-center gap-1">
+                                    <button @click="adjustQty(item, -1)" class="w-7 h-7 rounded-lg bg-slate-900 text-slate-300 flex items-center justify-center text-xs font-bold">-</button>
+                                    <span class="w-6 text-center text-xs font-bold text-white">{{ item.qty }}</span>
+                                    <button @click="adjustQty(item, 1)" class="w-7 h-7 rounded-lg bg-slate-900 text-slate-300 flex items-center justify-center text-xs font-bold">+</button>
+                                    <button @click="requestItemVoid(idx, item)" class="w-7 h-7 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center text-xs ml-1">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -249,55 +363,151 @@
                         </div>
 
                         <!-- Calculations -->
-                        <div class="p-4 border-t border-slate-800 bg-slate-950/80 space-y-1.5 text-xs">
+                        <div class="p-3.5 border-t border-slate-800 bg-slate-950 space-y-1 text-xs">
                             <div class="flex justify-between text-slate-400">
                                 <span>Sub Total</span>
                                 <span>Rs. {{ formatNumber(cartSubtotal) }}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs py-0.5">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-amber-400 font-bold"><i class="fa-solid fa-tag"></i> Discount:</span>
+                                    <span v-if="discount.type !== 'NONE'" class="text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-mono">{{ discount.reason }}</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <span v-if="discount.type !== 'NONE'" class="text-amber-400 font-black">- Rs. {{ formatNumber(discountAmount) }}</span>
+                                    <button v-if="discount.type === 'NONE'" @click="openDiscountModal" :disabled="cart.length === 0" class="text-[11px] bg-slate-900 hover:bg-slate-800 border border-slate-700 text-amber-400 px-2 py-0.5 rounded-lg font-bold disabled:opacity-30">
+                                        + Add Promo
+                                    </button>
+                                    <button v-else @click="removeDiscount" class="text-rose-400 hover:text-rose-300 p-0.5 text-xs"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
                             </div>
                             <div v-if="config.charges.enableServiceCharge && orderType === 'Dine-In'" class="flex justify-between text-slate-400">
                                 <span>Service Charge ({{ config.charges.serviceChargePercent }}%)</span>
                                 <span>Rs. {{ formatNumber(serviceCharge) }}</span>
                             </div>
-                            <div v-if="config.charges.enablePackagingFee && orderType !== 'Dine-In'" class="flex justify-between text-slate-400">
-                                <span>Packaging Fee</span>
-                                <span>Rs. {{ formatNumber(config.charges.packagingFeeAmount) }}</span>
-                            </div>
-                            <div v-if="config.charges.enableTax" class="flex justify-between text-slate-400">
-                                <span>Govt Tax (VAT {{ config.charges.vatPercent }}%)</span>
-                                <span>Rs. {{ formatNumber(taxAmount) }}</span>
-                            </div>
-                            <div class="flex justify-between text-base font-extrabold text-white pt-2 border-t border-slate-800">
-                                <span>Total Payable</span>
+                            <div class="flex justify-between text-sm font-extrabold text-white pt-1.5 border-t border-slate-800">
+                                <span>Net Total</span>
                                 <span class="text-emerald-400">Rs. {{ formatNumber(finalPayable) }}</span>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-2 pt-3">
-                                <button v-if="config.kitchen.enableKitchenModule" @click="fireKOT" :disabled="cart.length === 0" class="w-full bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-dark-950 border border-amber-500/30 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 disabled:opacity-30">
-                                    <i class="fa-solid fa-fire"></i> Send to Kitchen
+                            <div class="grid grid-cols-3 gap-2 pt-2">
+                                <button v-if="config.kitchen.enableKitchenModule" @click="fireKOT" :disabled="cart.length === 0" 
+                                    class="bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-dark-950 border border-amber-500/30 font-bold py-2.5 rounded-xl text-[11px] transition flex items-center justify-center gap-1 disabled:opacity-30">
+                                    <i class="fa-solid fa-fire"></i> KOT
                                 </button>
-                                <button @click="openCheckoutModal" :disabled="cart.length === 0" :class="!config.kitchen.enableKitchenModule ? 'col-span-2' : ''" class="w-full bg-emerald-500 hover:bg-emerald-600 text-dark-950 font-black py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 disabled:opacity-30 shadow-lg shadow-emerald-500/20">
-                                    <i class="fa-solid fa-credit-card"></i> Pay & Settle
+                                <button @click="printPreBill" :disabled="cart.length === 0"
+                                    class="bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-dark-950 border border-cyan-500/30 font-bold py-2.5 rounded-xl text-[11px] transition flex items-center justify-center gap-1 disabled:opacity-30">
+                                    <i class="fa-solid fa-print"></i> Pre-Bill
+                                </button>
+                                <button @click="openCheckoutModal" :disabled="cart.length === 0" 
+                                    class="bg-emerald-500 hover:bg-emerald-600 text-dark-950 font-black py-2.5 rounded-xl text-[11px] transition flex items-center justify-center gap-1 disabled:opacity-30 shadow-lg shadow-emerald-500/20">
+                                    <i class="fa-solid fa-credit-card"></i> Pay
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- ================= TAB 2: MENU & DISHES ================= -->
-                <div v-if="activeTab === 'menu-mgr'" class="h-full flex flex-col overflow-hidden bg-dark-900 border border-slate-800 rounded-2xl p-5">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-5 border-b border-slate-800 pb-4">
+                <!-- ================= TAB 2: FLOOR & TABLES ================= -->
+                <div v-if="activeTab === 'tables'" class="flex-1 flex flex-col bg-dark-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 min-h-[500px]">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 border-b border-slate-800 pb-3">
                         <div>
-                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-chair text-emerald-400"></i> Floor & Table Layout
+                            </h3>
+                            <p class="text-[11px] text-slate-400">Real-time table status (Total: {{ tables.length }} Tables)</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end overflow-x-auto">
+                            <div class="flex gap-1.5 overflow-x-auto custom-scroll pb-1">
+                                <button @click="selectedFloor = 'All'"
+                                    :class="selectedFloor === 'All' ? 'bg-emerald-500 text-dark-950 font-black' : 'bg-slate-800 text-slate-400 hover:text-white'"
+                                    class="px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
+                                    All ({{ tables.length }})
+                                </button>
+                                <button v-for="floor in floors" :key="floor" @click="selectedFloor = floor"
+                                    :class="selectedFloor === floor ? 'bg-emerald-500 text-dark-950 font-black' : 'bg-slate-800 text-slate-400 hover:text-white'"
+                                    class="px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
+                                    {{ floor }}
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button @click="openTransferModal" title="Shift / Transfer Table"
+                                    class="bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-dark-950 border border-cyan-500/30 px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 whitespace-nowrap">
+                                    <i class="fa-solid fa-right-left"></i> Shift
+                                </button>
+                                <button v-if="currentUser.role === 'admin' || currentUser.role === 'manager'" @click="openFloorModal" title="Manage Areas"
+                                    class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 whitespace-nowrap">
+                                    <i class="fa-solid fa-layer-group"></i> Areas
+                                </button>
+                                <button v-if="currentUser.role === 'admin' || currentUser.role === 'manager'" @click="openTableModal(null)"
+                                    class="bg-emerald-500 hover:bg-emerald-600 text-dark-950 px-3 py-1.5 rounded-xl text-xs font-black transition flex items-center gap-1 shadow-lg shadow-emerald-500/20 whitespace-nowrap">
+                                    <i class="fa-solid fa-plus"></i> Table
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floor Grid -->
+                    <div class="flex-1 overflow-y-auto custom-scroll grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 p-1">
+                        <div v-for="t in filteredTables" :key="t.id" @click="selectTableForOrder(t)"
+                            class="p-3.5 rounded-2xl border flex flex-col justify-between min-h-[130px] cursor-pointer transition-all hover:scale-[1.02] shadow-lg relative group"
+                            :class="t.status === 'Occupied' ? 'bg-rose-500/10 border-rose-500/40 hover:border-rose-500' : 'bg-slate-950 border-slate-800 hover:border-emerald-500/60'">
+                            <div>
+                                <div class="flex justify-between items-start mb-1.5">
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-xs font-black px-2 py-0.5 rounded-lg"
+                                            :class="t.status === 'Occupied' ? 'bg-rose-500 text-white' : 'bg-slate-900 border border-slate-800 text-emerald-400'">
+                                            {{ t.name }}
+                                        </span>
+                                        <div v-if="currentUser.role === 'admin' || currentUser.role === 'manager'" class="flex items-center">
+                                            <button @click.stop="openTableModal(t)" class="text-slate-500 hover:text-amber-400 p-1 text-[11px]"><i class="fa-solid fa-pen"></i></button>
+                                            <button @click.stop="deleteTable(t.id)" class="text-slate-500 hover:text-rose-400 p-1 text-[11px]"><i class="fa-solid fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full border uppercase"
+                                        :class="t.status === 'Occupied' ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 animate-pulse' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'">
+                                        {{ t.status }}
+                                    </span>
+                                </div>
+                                <div class="text-[10px] text-slate-400">
+                                    <i class="fa-solid fa-layer-group text-slate-500 mr-1"></i> {{ t.floor }}
+                                </div>
+                                <div class="text-[10px] text-slate-400 mt-0.5">
+                                    <i class="fa-solid fa-users text-slate-500 mr-1"></i> Seats: {{ t.capacity }}
+                                </div>
+                            </div>
+
+                            <div class="pt-2 border-t border-slate-800/80 flex justify-between items-end">
+                                <div v-if="t.status === 'Occupied'">
+                                    <div class="text-[9px] text-slate-400 font-mono">{{ t.openedTime }}</div>
+                                    <div class="text-xs font-black text-rose-400">Rs. {{ formatNumber(t.currentBill) }}</div>
+                                </div>
+                                <div v-else class="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
+                                    <i class="fa-solid fa-plus-circle"></i> Open
+                                </div>
+                                <div class="w-6 h-6 rounded-lg bg-slate-900 group-hover:bg-emerald-500 group-hover:text-dark-950 text-slate-400 flex items-center justify-center text-xs transition">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB 3: MENU & DISHES ================= -->
+                <div v-if="activeTab === 'menu-mgr'" class="flex-1 flex flex-col bg-dark-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 min-h-[500px]">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 border-b border-slate-800 pb-3">
+                        <div>
+                            <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                                 <i class="fa-solid fa-utensils text-emerald-400"></i> Menu Items & Price Manager
                             </h3>
-                            <p class="text-xs text-slate-400">Client ID: {{ restaurantId }} (Cloud Synced)</p>
+                            <p class="text-[11px] text-slate-400">Client ID: {{ restaurantId }} (Cloud Synced)</p>
                         </div>
                         <div class="flex gap-2">
-                            <button @click="openCategoryModal" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                            <button @click="openCategoryModal" class="bg-slate-800 hover:bg-slate-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                                 <i class="fa-solid fa-tags text-emerald-400"></i> Categories ({{ categories.length }})
                             </button>
-                            <button @click="openDishModal(null)" class="bg-emerald-500 hover:bg-emerald-600 text-dark-950 px-4 py-2 rounded-xl text-xs font-black transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
-                                <i class="fa-solid fa-plus"></i> + Add New Dish
+                            <button @click="openDishModal(null)" class="bg-emerald-500 hover:bg-emerald-600 text-dark-950 px-3.5 py-1.5 rounded-xl text-xs font-black transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
+                                <i class="fa-solid fa-plus"></i> + Add Dish
                             </button>
                         </div>
                     </div>
@@ -306,24 +516,24 @@
                         <table class="w-full text-left text-xs text-slate-300">
                             <thead class="bg-slate-950 border-b border-slate-800 text-slate-400 uppercase font-bold sticky top-0">
                                 <tr>
-                                    <th class="p-3.5">ID</th>
-                                    <th class="p-3.5">Dish Name</th>
-                                    <th class="p-3.5">Category</th>
-                                    <th class="p-3.5">Portion</th>
-                                    <th class="p-3.5">Selling Price (LKR)</th>
-                                    <th class="p-3.5 text-right">Actions</th>
+                                    <th class="p-3">ID</th>
+                                    <th class="p-3">Dish Name</th>
+                                    <th class="p-3">Category</th>
+                                    <th class="p-3">Station</th>
+                                    <th class="p-3">Price (LKR)</th>
+                                    <th class="p-3 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800">
                                 <tr v-for="dish in products" :key="dish.id" class="hover:bg-slate-800/40">
-                                    <td class="p-3.5 font-mono text-slate-500">#{{ dish.id }}</td>
-                                    <td class="p-3.5 font-bold text-white">{{ dish.name }}</td>
-                                    <td class="p-3.5"><span class="px-2.5 py-1 bg-slate-950 border border-slate-800 rounded-lg text-emerald-400 font-semibold">{{ dish.category }}</span></td>
-                                    <td class="p-3.5 text-slate-400">{{ dish.portion }}</td>
-                                    <td class="p-3.5 font-black text-emerald-400 text-sm">Rs. {{ formatNumber(dish.price) }}</td>
-                                    <td class="p-3.5 text-right space-x-1.5">
-                                        <button @click="openDishModal(dish)" class="bg-slate-800 hover:bg-slate-700 text-amber-400 p-2 rounded-lg transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        <button @click="deleteDish(dish.id)" class="bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white p-2 rounded-lg transition"><i class="fa-solid fa-trash"></i></button>
+                                    <td class="p-3 font-mono text-slate-500">#{{ dish.id }}</td>
+                                    <td class="p-3 font-bold text-white">{{ dish.name }}</td>
+                                    <td class="p-3"><span class="px-2 py-0.5 bg-slate-950 border border-slate-800 rounded-lg text-emerald-400 font-semibold text-[10px]">{{ dish.category }}</span></td>
+                                    <td class="p-3"><span class="px-2 py-0.5 bg-amber-500/10 border border-amber-500/30 rounded-lg text-amber-400 font-bold text-[10px]">{{ dish.station || 'Main Kitchen' }}</span></td>
+                                    <td class="p-3 font-black text-emerald-400">Rs. {{ formatNumber(dish.price) }}</td>
+                                    <td class="p-3 text-right space-x-1">
+                                        <button @click="openDishModal(dish)" class="bg-slate-800 hover:bg-slate-700 text-amber-400 p-1.5 rounded-lg transition text-xs"><i class="fa-solid fa-pen-to-square"></i></button>
+                                        <button @click="deleteDish(dish.id)" class="bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white p-1.5 rounded-lg transition text-xs"><i class="fa-solid fa-trash"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -331,38 +541,47 @@
                     </div>
                 </div>
 
-                <!-- ================= TAB 3: KITCHEN DISPLAY (KDS) ================= -->
-                <div v-if="activeTab === 'kitchen' && config.kitchen.enableKitchenModule" class="h-full flex flex-col overflow-hidden">
-                    <div class="flex justify-between items-center mb-4">
+                <!-- ================= TAB 4: KITCHEN DISPLAY (KDS) ================= -->
+                <div v-if="activeTab === 'kitchen' && config.kitchen.enableKitchenModule" class="flex-1 flex flex-col min-h-[500px]">
+                    <div class="flex justify-between items-center mb-3">
                         <div>
-                            <h3 class="text-lg font-bold text-white">Live Kitchen Display System (KDS)</h3>
-                            <p class="text-xs text-slate-400">Firebase Realtime KOT Queue</p>
+                            <h3 class="text-base sm:text-lg font-bold text-white">Live Kitchen Display (KDS)</h3>
+                            <p class="text-[11px] text-slate-400">Realtime KOT Tickets</p>
                         </div>
-                        <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-300 border border-slate-700">
+                        <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-300 border border-slate-700 font-bold">
                             Active Tickets: {{ liveKdsOrders.length }}
                         </span>
                     </div>
 
-                    <div class="flex-1 overflow-x-auto overflow-y-hidden custom-scroll flex gap-4 pb-2">
+                    <div class="flex-1 overflow-x-auto custom-scroll flex gap-3 pb-2">
+                        <div v-if="liveKdsOrders.length === 0" class="w-full flex flex-col items-center justify-center p-8 bg-dark-900 rounded-2xl border border-slate-800 text-slate-500 text-center">
+                            <i class="fa-solid fa-mug-hot text-4xl mb-2 opacity-30"></i>
+                            <p class="text-xs font-bold">Kitchen Queue is Empty (සියලුම KOT සාදා අවසන්)</p>
+                        </div>
                         <div v-for="kot in liveKdsOrders" :key="kot.id" 
-                            class="w-80 flex-shrink-0 border border-slate-800 bg-dark-900 rounded-2xl p-4 flex flex-col justify-between h-full shadow-lg">
+                            class="w-72 sm:w-80 flex-shrink-0 border border-slate-800 bg-dark-900 rounded-2xl p-3.5 flex flex-col justify-between shadow-lg">
                             <div>
-                                <div class="flex justify-between items-start border-b border-slate-800 pb-3 mb-3">
+                                <div class="flex justify-between items-start border-b border-slate-800 pb-2.5 mb-2.5">
                                     <div>
                                         <span class="text-xs font-black text-emerald-400">#KOT-{{ kot.id }}</span>
                                         <h4 class="font-extrabold text-sm text-slate-200">{{ kot.table || 'Takeaway' }}</h4>
                                     </div>
                                     <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-mono">{{ kot.type }}</span>
                                 </div>
-                                <ul class="space-y-2">
-                                    <li v-for="(it, i) in kot.items" :key="i" class="flex justify-between text-xs bg-slate-950/60 p-2 rounded-lg border border-slate-800/60">
-                                        <span class="font-semibold text-slate-300">{{ it.name }}</span>
-                                        <span class="font-extrabold text-emerald-400">x{{ it.qty }}</span>
+                                <ul class="space-y-1.5">
+                                    <li v-for="(it, i) in kot.items" :key="i" class="bg-slate-950/60 p-2 rounded-lg border border-slate-800/60 text-xs">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-bold text-slate-200">{{ it.name }}</span>
+                                            <span class="font-black text-emerald-400 text-sm">x{{ it.qty }}</span>
+                                        </div>
+                                        <div v-if="it.note" class="text-[10px] text-amber-300 font-semibold mt-1 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">
+                                            ⚠️ {{ it.note }}
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="pt-3 border-t border-slate-800">
-                                <button @click="completeKOT(kot.id)" class="w-full bg-emerald-500 hover:bg-emerald-600 text-dark-950 font-black py-2 rounded-xl text-xs transition">
+                            <div class="pt-3 border-t border-slate-800 mt-2">
+                                <button @click="completeKOT(kot.id)" class="w-full bg-emerald-500 hover:bg-emerald-600 text-dark-950 font-black py-2.5 rounded-xl text-xs transition shadow-md">
                                     <i class="fa-solid fa-check-double mr-1"></i> Ready to Serve
                                 </button>
                             </div>
@@ -370,43 +589,39 @@
                     </div>
                 </div>
 
-                <!-- ================= TAB 4: STOCK & BOM INVENTORY ================= -->
-                <div v-if="activeTab === 'inventory'" class="h-full flex flex-col overflow-hidden bg-dark-900 border border-slate-800 rounded-2xl p-5">
-                    <div class="flex justify-between items-center mb-4">
+                <!-- ================= TAB 5: STOCK & BOM ================= -->
+                <div v-if="activeTab === 'inventory'" class="flex-1 flex flex-col bg-dark-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 min-h-[500px]">
+                    <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-3">
                         <div>
-                            <h3 class="text-lg font-bold text-white">Raw Materials & Bill of Materials (BOM)</h3>
-                            <p class="text-xs text-slate-400">Real-time depletion based on recipes</p>
+                            <h3 class="text-base sm:text-lg font-bold text-white">Stock & Bill of Materials</h3>
+                            <p class="text-[11px] text-slate-400">Depletion based on recipes</p>
                         </div>
-                        <button class="bg-emerald-500 text-dark-950 px-3.5 py-1.5 rounded-xl text-xs font-bold">+ New Raw Material</button>
+                        <button class="bg-emerald-500 text-dark-950 px-3 py-1.5 rounded-xl text-xs font-bold">+ New Material</button>
                     </div>
 
                     <div class="flex-1 overflow-y-auto custom-scroll border border-slate-800 rounded-xl">
                         <table class="w-full text-left text-xs text-slate-300">
                             <thead class="bg-slate-950 border-b border-slate-800 text-slate-400 uppercase font-bold sticky top-0">
                                 <tr>
-                                    <th class="p-3.5">SKU</th>
-                                    <th class="p-3.5">Item Name</th>
-                                    <th class="p-3.5">Category</th>
-                                    <th class="p-3.5">In Stock</th>
-                                    <th class="p-3.5">Reorder Point</th>
-                                    <th class="p-3.5">Status</th>
-                                    <th class="p-3.5 text-right">Action</th>
+                                    <th class="p-3">SKU</th>
+                                    <th class="p-3">Name</th>
+                                    <th class="p-3">Stock</th>
+                                    <th class="p-3">Status</th>
+                                    <th class="p-3 text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800">
                                 <tr v-for="ing in ingredients" :key="ing.sku" class="hover:bg-slate-800/40">
-                                    <td class="p-3.5 font-mono text-slate-400">{{ ing.sku }}</td>
-                                    <td class="p-3.5 font-bold text-white">{{ ing.name }}</td>
-                                    <td class="p-3.5">{{ ing.category }}</td>
-                                    <td class="p-3.5 font-extrabold text-emerald-400">{{ ing.stock }} {{ ing.unit }}</td>
-                                    <td class="p-3.5 text-slate-400">{{ ing.minStock }} {{ ing.unit }}</td>
-                                    <td class="p-3.5">
-                                        <span :class="ing.stock <= ing.minStock ? 'bg-rose-500/20 text-rose-400 border-rose-500/30' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'" class="px-2.5 py-1 rounded-full text-[10px] font-extrabold border">
-                                            {{ ing.stock <= ing.minStock ? 'CRITICAL LOW' : 'OPTIMAL' }}
+                                    <td class="p-3 font-mono text-slate-400">{{ ing.sku }}</td>
+                                    <td class="p-3 font-bold text-white">{{ ing.name }}</td>
+                                    <td class="p-3 font-extrabold text-emerald-400">{{ ing.stock }} {{ ing.unit }}</td>
+                                    <td class="p-3">
+                                        <span :class="ing.stock <= ing.minStock ? 'bg-rose-500/20 text-rose-400 border-rose-500/30' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'" class="px-2 py-0.5 rounded-full text-[9px] font-extrabold border">
+                                            {{ ing.stock <= ing.minStock ? 'LOW' : 'OPTIMAL' }}
                                         </span>
                                     </td>
-                                    <td class="p-3.5 text-right">
-                                        <button @click="restockItem(ing)" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded-lg text-xs font-semibold">+ Restock</button>
+                                    <td class="p-3 text-right">
+                                        <button @click="restockItem(ing)" class="bg-slate-800 hover:bg-slate-700 text-white px-2 py-1 rounded-lg text-[10px] font-bold">+ Restock</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -414,24 +629,24 @@
                     </div>
                 </div>
 
-                <!-- ================= TAB 5: AUDIT & VOID LOGS ================= -->
-                <div v-if="activeTab === 'audit'" class="h-full flex flex-col overflow-hidden bg-dark-900 border border-slate-800 rounded-2xl p-5">
-                    <div class="border-b border-slate-800 pb-4 mb-4">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <!-- ================= TAB 6: AUDIT & VOID LOGS ================= -->
+                <div v-if="activeTab === 'audit'" class="flex-1 flex flex-col bg-dark-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 min-h-[500px]">
+                    <div class="border-b border-slate-800 pb-3 mb-3">
+                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-shield-halved text-rose-400"></i> Anti-Theft Void & Cancel Logs
                         </h3>
-                        <p class="text-xs text-slate-400">කැෂියර්වරුන් විසින් බිල්පත් Cancel කළ වාර්තා</p>
+                        <p class="text-[11px] text-slate-400">කැෂියර්වරුන් විසින් බිල්පත් Cancel කළ වාර්තා</p>
                     </div>
 
                     <div class="flex-1 overflow-y-auto custom-scroll border border-slate-800 rounded-xl">
                         <table class="w-full text-left text-xs text-slate-300">
                             <thead class="bg-slate-950 border-b border-slate-800 text-slate-400 uppercase font-bold sticky top-0">
                                 <tr>
-                                    <th class="p-3.5">Time</th>
-                                    <th class="p-3.5">Dish Name</th>
-                                    <th class="p-3.5">Qty / Value</th>
-                                    <th class="p-3.5">Authorized By</th>
-                                    <th class="p-3.5">Reason for Void</th>
+                                    <th class="p-3">Time</th>
+                                    <th class="p-3">Dish Name</th>
+                                    <th class="p-3">Qty / Value</th>
+                                    <th class="p-3">Authorized By</th>
+                                    <th class="p-3">Reason</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-800">
@@ -439,102 +654,78 @@
                                     <td colspan="5" class="p-6 text-center text-slate-500">කිසිදු Cancel කිරීමක් සිදුවී නොමැත (Clean Record)</td>
                                 </tr>
                                 <tr v-for="(log, i) in voidLogs" :key="i" class="hover:bg-slate-800/40">
-                                    <td class="p-3.5 font-mono text-slate-400">{{ log.time }}</td>
-                                    <td class="p-3.5 font-bold text-rose-400">{{ log.dishName }}</td>
-                                    <td class="p-3.5">x{{ log.qty }} (Rs. {{ formatNumber(log.price * log.qty) }})</td>
-                                    <td class="p-3.5 font-bold text-amber-400">{{ log.authorizedBy }}</td>
-                                    <td class="p-3.5 text-slate-300 italic">{{ log.reason }}</td>
+                                    <td class="p-3 font-mono text-slate-400">{{ log.time }}</td>
+                                    <td class="p-3 font-bold text-rose-400">{{ log.dishName }}</td>
+                                    <td class="p-3">x{{ log.qty }} (Rs. {{ formatNumber(log.price * log.qty) }})</td>
+                                    <td class="p-3 font-bold text-amber-400">{{ log.authorizedBy }}</td>
+                                    <td class="p-3 text-slate-300 italic">{{ log.reason }}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- ================= TAB 6: FINANCE & COGS ================= -->
-                <div v-if="activeTab === 'finance'" class="h-full overflow-y-auto custom-scroll space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="bg-dark-900 border border-slate-800 p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400 uppercase font-semibold">Total Revenue (Gross)</span>
-                            <h3 class="text-2xl font-black text-emerald-400 mt-1">Rs. {{ formatNumber(financials.grossSales) }}</h3>
-                            <span class="text-[10px] text-emerald-500">Firebase Synced</span>
+                <!-- ================= TAB 7: FINANCE & COGS ================= -->
+                <div v-if="activeTab === 'finance'" class="flex-1 overflow-y-auto custom-scroll space-y-4">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl">
+                            <span class="text-[10px] text-slate-400 uppercase font-semibold">Total Revenue (Gross)</span>
+                            <h3 class="text-lg sm:text-2xl font-black text-emerald-400 mt-1">Rs. {{ formatNumber(financials.grossSales) }}</h3>
+                            <span class="text-[9px] text-emerald-500">Cloud Synced</span>
                         </div>
-                        <div class="bg-dark-900 border border-slate-800 p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400 uppercase font-semibold">Cost of Goods (COGS)</span>
-                            <h3 class="text-2xl font-black text-rose-400 mt-1">Rs. {{ formatNumber(financials.cogs) }}</h3>
-                            <span class="text-[10px] text-slate-400">Raw Food Consumption</span>
+                        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl">
+                            <span class="text-[10px] text-slate-400 uppercase font-semibold">Cost of Goods (COGS)</span>
+                            <h3 class="text-lg sm:text-2xl font-black text-rose-400 mt-1">Rs. {{ formatNumber(financials.cogs) }}</h3>
+                            <span class="text-[9px] text-slate-400">Consumption</span>
                         </div>
-                        <div class="bg-dark-900 border border-slate-800 p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400 uppercase font-semibold">Gross Profit Margin</span>
-                            <h3 class="text-2xl font-black text-cyan-400 mt-1">{{ calculateMargin }}%</h3>
-                            <span class="text-[10px] text-cyan-500">Healthy Margin</span>
+                        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl">
+                            <span class="text-[10px] text-slate-400 uppercase font-semibold">Profit Margin</span>
+                            <h3 class="text-lg sm:text-2xl font-black text-cyan-400 mt-1">{{ calculateMargin }}%</h3>
+                            <span class="text-[9px] text-cyan-500">Healthy Margin</span>
                         </div>
-                        <div class="bg-dark-900 border border-slate-800 p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400 uppercase font-semibold">Net Operating Profit</span>
-                            <h3 class="text-2xl font-black text-amber-400 mt-1">Rs. {{ formatNumber(financials.grossSales - financials.cogs - financials.overhead) }}</h3>
-                            <span class="text-[10px] text-slate-400">After Overheads</span>
+                        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl">
+                            <span class="text-[10px] text-slate-400 uppercase font-semibold">Net Operating Profit</span>
+                            <h3 class="text-lg sm:text-2xl font-black text-amber-400 mt-1">Rs. {{ formatNumber(financials.grossSales - financials.cogs - financials.overhead) }}</h3>
+                            <span class="text-[9px] text-slate-400">After Overheads</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- ================= TAB 7: SETTINGS & MODULES (WITH MULTI-TENANT SWITCHER) ================= -->
-                <div v-if="activeTab === 'settings'" class="h-full overflow-y-auto custom-scroll space-y-6 bg-dark-900 border border-slate-800 rounded-2xl p-6">
-                    <div class="border-b border-slate-800 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <!-- ================= TAB 8: SETTINGS & MODULES ================= -->
+                <div v-if="activeTab === 'settings'" class="flex-1 overflow-y-auto custom-scroll space-y-4 bg-dark-900 border border-slate-800 rounded-2xl p-4 sm:p-6">
+                    <div class="border-b border-slate-800 pb-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                         <div>
-                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-sliders text-emerald-400"></i> Module & Client Settings
+                            <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-sliders text-emerald-400"></i> Settings & Configurations
                             </h3>
-                            <p class="text-xs text-slate-400">Active Client Store ID: <span class="font-mono text-emerald-400 font-bold bg-slate-950 px-2.5 py-0.5 rounded-lg border border-slate-800">{{ restaurantId }}</span></p>
+                            <p class="text-xs text-slate-400">Store ID: <span class="font-mono text-emerald-400 font-bold bg-slate-950 px-2 py-0.5 rounded-lg">{{ restaurantId }}</span></p>
                         </div>
-                        <button @click="changeRestaurantId" class="bg-emerald-500 hover:bg-emerald-600 text-dark-950 px-4 py-2 rounded-xl text-xs font-black transition shadow-lg shadow-emerald-500/20">
-                            <i class="fa-solid fa-store mr-1"></i> Switch Client Store ID
+                        <button @click="changeRestaurantId" class="bg-emerald-500 hover:bg-emerald-600 text-dark-950 px-3.5 py-1.5 rounded-xl text-xs font-black transition">
+                            <i class="fa-solid fa-store mr-1"></i> Switch Client ID
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-4">
-                            <h4 class="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-bell-concierge"></i> Ordering Modes
-                            </h4>
-                            <div class="space-y-3 text-xs">
-                                <label class="flex items-center justify-between p-2 rounded-xl bg-dark-900 hover:bg-slate-800/50 cursor-pointer">
-                                    <span>Enable Dine-In Table Management</span>
-                                    <input type="checkbox" v-model="config.ordering.enableDineIn" @change="saveConfigToCloud" class="w-4 h-4 accent-emerald-500 rounded">
+                    <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-3">
+                        <h4 class="text-xs font-bold text-cyan-400 uppercase tracking-wider">Taxes & Local Charges</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                            <div class="p-2.5 rounded-xl bg-dark-900 space-y-2 border border-slate-800">
+                                <label class="flex items-center justify-between cursor-pointer">
+                                    <span class="font-bold text-slate-200">Service Charge (Dine-In)</span>
+                                    <input type="checkbox" v-model="config.charges.enableServiceCharge" @change="saveConfigToCloud" class="w-4 h-4 accent-cyan-500">
                                 </label>
-                                <label class="flex items-center justify-between p-2 rounded-xl bg-dark-900 hover:bg-slate-800/50 cursor-pointer">
-                                    <span>Enable Takeaway</span>
-                                    <input type="checkbox" v-model="config.ordering.enableTakeaway" @change="saveConfigToCloud" class="w-4 h-4 accent-emerald-500 rounded">
-                                </label>
-                                <label class="flex items-center justify-between p-2 rounded-xl bg-dark-900 hover:bg-slate-800/50 cursor-pointer">
-                                    <span>Enable Delivery</span>
-                                    <input type="checkbox" v-model="config.ordering.enableDelivery" @change="saveConfigToCloud" class="w-4 h-4 accent-emerald-500 rounded">
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-4">
-                            <h4 class="text-sm font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-percent"></i> Taxes & Service Charge
-                            </h4>
-                            <div class="space-y-3 text-xs">
-                                <div class="p-2 rounded-xl bg-dark-900 space-y-2">
-                                    <label class="flex items-center justify-between cursor-pointer">
-                                        <span>Enable Service Charge</span>
-                                        <input type="checkbox" v-model="config.charges.enableServiceCharge" @change="saveConfigToCloud" class="w-4 h-4 accent-cyan-500 rounded">
-                                    </label>
-                                    <div v-if="config.charges.enableServiceCharge" class="flex items-center justify-between pt-1">
-                                        <span class="text-slate-400">Rate (%)</span>
-                                        <input type="number" v-model="config.charges.serviceChargePercent" @change="saveConfigToCloud" class="w-20 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-right text-slate-200">
-                                    </div>
+                                <div v-if="config.charges.enableServiceCharge" class="flex items-center justify-between pt-1 border-t border-slate-800">
+                                    <span class="text-slate-400">Rate (%)</span>
+                                    <input type="number" v-model.number="config.charges.serviceChargePercent" @change="saveConfigToCloud" class="w-20 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-right text-slate-200 font-bold">
                                 </div>
-                                <div class="p-2 rounded-xl bg-dark-900 space-y-2">
-                                    <label class="flex items-center justify-between cursor-pointer">
-                                        <span>Enable Govt VAT / SSCL</span>
-                                        <input type="checkbox" v-model="config.charges.enableTax" @change="saveConfigToCloud" class="w-4 h-4 accent-cyan-500 rounded">
-                                    </label>
-                                    <div v-if="config.charges.enableTax" class="flex items-center justify-between pt-1">
-                                        <span class="text-slate-400">VAT Rate (%)</span>
-                                        <input type="number" v-model="config.charges.vatPercent" @change="saveConfigToCloud" class="w-20 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-right text-slate-200">
-                                    </div>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-dark-900 space-y-2 border border-slate-800">
+                                <label class="flex items-center justify-between cursor-pointer">
+                                    <span class="font-bold text-slate-200">Govt VAT</span>
+                                    <input type="checkbox" v-model="config.charges.enableVAT" @change="saveConfigToCloud" class="w-4 h-4 accent-cyan-500">
+                                </label>
+                                <div v-if="config.charges.enableVAT" class="flex items-center justify-between pt-1 border-t border-slate-800">
+                                    <span class="text-slate-400">Rate (%)</span>
+                                    <input type="number" v-model.number="config.charges.vatPercent" @change="saveConfigToCloud" class="w-20 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-right text-slate-200 font-bold">
                                 </div>
                             </div>
                         </div>
@@ -544,8 +735,158 @@
             </main>
         </div>
 
-        <!-- ================= MODALS ================= -->
-        <!-- 1. VOID MODAL -->
+        <!-- ================= MODALS & POPUPS ================= -->
+
+        <!-- 1. DYNAMIC APPLY DISCOUNT MODAL -->
+        <div v-if="showDiscountModal" class="fixed inset-0 bg-dark-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <div class="bg-dark-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl relative max-h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-tags text-amber-400"></i>
+                        <h3 class="text-base font-bold text-white">Apply Promotion / Discount</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button v-if="currentUser.role === 'admin' || currentUser.role === 'manager'" @click="openPromoManager" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 px-2.5 py-1 rounded-lg font-bold transition flex items-center gap-1">
+                            <i class="fa-solid fa-gear"></i> Manage Offers
+                        </button>
+                        <button type="button" @click="showDiscountModal = false" class="text-slate-400 hover:text-white p-1 text-lg"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto custom-scroll space-y-4 pr-1 text-xs">
+                    <div>
+                        <label class="block text-slate-400 font-semibold mb-2">Available Restaurant Offers</label>
+                        <div v-if="promotions.length === 0" class="p-4 bg-slate-950 rounded-2xl border border-slate-800 text-center text-slate-500">
+                            Offers කිසිවක් සකසා නැත. "Manage Offers" ගොස් අලුත් Promos එක් කරන්න.
+                        </div>
+                        <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button v-for="promo in promotions" :key="promo.id" 
+                                @click="applyDiscount(promo.type, promo.type === 'PERCENT' ? promo.value : 0, promo.type === 'FLAT' ? promo.value : 0, promo.name)"
+                                class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-xl text-left transition flex justify-between items-center group">
+                                <span class="font-bold text-slate-200 text-xs truncate pr-1 group-hover:text-emerald-400">{{ promo.name }}</span>
+                                <span class="text-amber-400 font-black text-xs whitespace-nowrap">
+                                    {{ promo.type === 'PERCENT' ? promo.value + '%' : 'Rs. ' + formatNumber(promo.value) }}
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Custom One-time Discount -->
+                    <div class="p-3 bg-slate-950 rounded-2xl border border-slate-800 space-y-2">
+                        <label class="block text-amber-400 font-black uppercase text-[10px] tracking-wider">Custom One-Time Discount</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Percentage (% Rate)</label>
+                                <div class="flex gap-1">
+                                    <input id="custom-rate-input" type="number" min="1" max="100" placeholder="%" class="w-full bg-dark-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-500">
+                                    <button @click="applyDiscount('PERCENT', document.getElementById('custom-rate-input').value, 0, `Special Discount (${document.getElementById('custom-rate-input').value}%)`)" class="bg-amber-500 hover:bg-amber-400 text-dark-950 px-2.5 py-1 rounded-lg font-black text-xs">Apply</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Flat Cash (LKR)</label>
+                                <div class="flex gap-1">
+                                    <input id="custom-flat-input" type="number" step="50" placeholder="Rs." class="w-full bg-dark-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-500">
+                                    <button @click="applyDiscount('FLAT', 0, document.getElementById('custom-flat-input').value, `Courtesy Rs. ${document.getElementById('custom-flat-input').value}`)" class="bg-amber-500 hover:bg-amber-400 text-dark-950 px-2.5 py-1 rounded-lg font-black text-xs">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. MANAGE RESTAURANT OFFERS MODAL -->
+        <div v-if="showPromoManagerModal" class="fixed inset-0 bg-dark-950/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <div class="bg-dark-900 border border-slate-800 w-full max-w-lg rounded-3xl p-6 shadow-2xl relative max-h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-gear text-emerald-400"></i> Manage Restaurant Card Offers & Promos
+                    </h3>
+                    <button type="button" @click="showPromoManagerModal = false; showDiscountModal = true;" class="text-slate-400 hover:text-white p-1 text-lg"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 space-y-3 mb-4 text-xs">
+                    <h4 class="font-bold text-emerald-400 uppercase text-[10px] tracking-wider">{{ promoForm.id ? 'Edit Offer' : '+ Create New Restaurant Offer' }}</h4>
+                    <div>
+                        <label class="block text-slate-300 font-semibold mb-1">Offer Name *</label>
+                        <input v-model="promoForm.name" type="text" placeholder="e.g. Commercial Bank 10% Off, BOC Card Deal" class="w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 font-bold focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-slate-300 font-semibold mb-1">Discount Type *</label>
+                            <select v-model="promoForm.type" class="w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 font-bold focus:outline-none focus:border-emerald-500">
+                                <option value="PERCENT">Percentage (%) Discount</option>
+                                <option value="FLAT">Fixed Amount (LKR) Discount</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 font-semibold mb-1">Value ({{ promoForm.type === 'PERCENT' ? '%' : 'Rs.' }}) *</label>
+                            <input v-model.number="promoForm.value" type="number" min="1" class="w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-amber-400 font-black focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-2 pt-1">
+                        <button v-if="promoForm.id" @click="promoForm = { id: null, name: '', type: 'PERCENT', value: 10 }" class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-xl font-bold">Cancel Edit</button>
+                        <button @click="savePromotion" class="bg-emerald-500 hover:bg-emerald-400 text-dark-950 px-4 py-1.5 rounded-xl font-black transition shadow-lg shadow-emerald-500/20">
+                            {{ promoForm.id ? 'Update Offer' : '+ Save to Cloud' }}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto custom-scroll space-y-2 pr-1 text-xs">
+                    <label class="block text-slate-400 font-semibold mb-1">Current Active Offers ({{ promotions.length }})</label>
+                    <div v-for="promo in promotions" :key="promo.id" class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div>
+                            <span class="font-bold text-white block">{{ promo.name }}</span>
+                            <span class="text-[11px] text-amber-400 font-black">{{ promo.type === 'PERCENT' ? promo.value + '% Off' : 'Rs. ' + formatNumber(promo.value) + ' Off' }}</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button @click="promoForm = { ...promo }" class="text-slate-400 hover:text-amber-400 p-1.5 transition" title="Edit Offer"><i class="fa-solid fa-pen"></i></button>
+                            <button @click="deletePromotion(promo.id)" class="text-slate-400 hover:text-rose-400 p-1.5 transition" title="Delete Offer"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. ITEM COOKING NOTE MODAL -->
+        <div v-if="showNoteModal" class="fixed inset-0 bg-dark-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <div class="bg-dark-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl relative">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-3">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-pen-clip text-amber-400"></i> Special Cooking Instruction
+                    </h3>
+                    <button type="button" @click="showNoteModal = false" class="text-slate-400 hover:text-white p-1 text-lg"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <p class="text-slate-300 font-bold">Item: <span class="text-emerald-400">{{ selectedCartItemForNote?.name }}</span></p>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1.5">ජනප්‍රිය උපදෙස් (Quick Select):</label>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button v-for="tag in quickNoteTags" :key="tag" @click="addQuickTag(tag)"
+                                class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 px-2.5 py-1 rounded-xl text-[11px] font-semibold transition hover:text-amber-400">
+                                + {{ tag }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 mb-1">වෙනත් උපදෙස් (Custom Note):</label>
+                        <input v-model="itemNoteInput" @keyup.enter="saveItemNote" type="text" placeholder="e.g. චීස් වැඩියෙන්, බබාට දෙන නිසා සැර එපා" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-amber-300 font-bold focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <div class="pt-2 flex gap-2">
+                        <button type="button" @click="showNoteModal = false" class="flex-1 bg-slate-800 text-slate-300 font-bold py-2 rounded-xl">Cancel</button>
+                        <button type="button" @click="saveItemNote" class="flex-1 bg-amber-500 hover:bg-amber-400 text-dark-950 font-black py-2 rounded-xl transition shadow-lg shadow-amber-500/20">
+                            Save Instruction
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. VOID MODAL -->
         <div v-if="showVoidModal" class="fixed inset-0 bg-dark-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div class="bg-dark-900 border border-rose-500/30 w-full max-w-sm rounded-3xl p-6 shadow-2xl">
                 <div class="flex items-center gap-3 text-rose-400 mb-3">
@@ -576,50 +917,192 @@
             </div>
         </div>
 
-        <!-- 2. CLOSE SHIFT MODAL -->
-        <div v-if="showShiftModal" class="fixed inset-0 bg-dark-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div class="bg-dark-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl">
+        <!-- 5. CLOSE SHIFT MODAL (DENOMINATIONS) -->
+        <div v-if="showShiftModal" class="fixed inset-0 bg-dark-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <div class="bg-dark-900 border border-slate-800 w-full max-w-lg rounded-3xl p-6 shadow-2xl max-h-[90vh] flex flex-col">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
-                    <h3 class="text-base font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-receipt text-emerald-400"></i> Close Shift & Z-Report Settlement
-                    </h3>
-                    <button @click="showShiftModal = false" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                    <div>
+                        <h3 class="text-base font-black text-white flex items-center gap-2">
+                            <i class="fa-solid fa-calculator text-emerald-400"></i> Drawer Cash Audit & Z-Report
+                        </h3>
+                        <p class="text-[11px] text-slate-400">Shift #{{ currentShift.id }} | Cashier: {{ currentUser.name }}</p>
+                    </div>
+                    <button @click="showShiftModal = false" class="text-slate-400 hover:text-white p-1 text-lg"><i class="fa-solid fa-xmark"></i></button>
                 </div>
 
-                <div class="space-y-2.5 text-xs">
-                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
-                        <div class="flex justify-between text-slate-400">
-                            <span>System Calculated Cash:</span>
-                            <span class="font-bold text-white">Rs. {{ formatNumber(currentShift.cashSales) }}</span>
+                <div class="flex-1 overflow-y-auto custom-scroll space-y-4 pr-1 text-xs">
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-center">
+                            <span class="text-[10px] text-slate-400 block font-semibold">Expected Cash</span>
+                            <span class="text-xs font-black text-emerald-400">Rs. {{ formatNumber(currentShift.cashSales) }}</span>
                         </div>
-                        <div class="flex justify-between text-slate-400">
-                            <span>Card & LankaQR Sales:</span>
-                            <span class="font-bold text-white">Rs. {{ formatNumber(currentShift.cardSales + currentShift.qrSales) }}</span>
+                        <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-center">
+                            <span class="text-[10px] text-slate-400 block font-semibold">Card / QR Sales</span>
+                            <span class="text-xs font-black text-cyan-400">Rs. {{ formatNumber(currentShift.cardSales + currentShift.qrSales) }}</span>
                         </div>
-                        <div class="flex justify-between text-emerald-400 font-bold border-t border-slate-800 pt-1">
-                            <span>Total Expected Sales:</span>
-                            <span>Rs. {{ formatNumber(currentShift.totalSales) }}</span>
+                        <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-center">
+                            <span class="text-[10px] text-slate-400 block font-semibold">Gross Shift Total</span>
+                            <span class="text-xs font-black text-white">Rs. {{ formatNumber(currentShift.totalSales) }}</span>
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-slate-400 mb-1">Physical Cash Count in Drawer (අතේ ඇති මුදල)</label>
-                        <input v-model.number="actualCashInput" type="number" placeholder="Enter counted cash..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm font-bold text-emerald-400">
+                    <!-- Sri Lankan Denominations Grid -->
+                    <div class="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 space-y-2">
+                        <h4 class="text-[11px] font-black text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-money-bills"></i> ශ්‍රී ලංකා මුදල් නෝට්ටු ගණනය (Cash Breakdown)
+                        </h4>
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <div v-for="denom in [5000, 1000, 500, 100, 50, 20]" :key="denom" class="flex items-center justify-between bg-dark-900 px-2.5 py-1.5 rounded-xl border border-slate-800/80">
+                                <span class="font-bold text-slate-300 text-[11px]">Rs. {{ denom }} x</span>
+                                <input v-model.number="denominations[denom]" type="number" min="0" placeholder="0" class="w-16 bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-right text-xs text-emerald-400 font-bold focus:outline-none focus:border-emerald-500">
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between bg-dark-900 px-2.5 py-2 rounded-xl border border-slate-800/80 mt-1">
+                            <span class="font-bold text-slate-300 text-[11px]">Coins & Loose Cash (කාසි මුදල)</span>
+                            <input v-model.number="denominations.coins" type="number" min="0" placeholder="0.00" class="w-24 bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-right text-xs text-emerald-400 font-bold focus:outline-none focus:border-emerald-500">
+                        </div>
                     </div>
 
-                    <div v-if="actualCashInput !== null" :class="(actualCashInput - currentShift.cashSales) < 0 ? 'bg-rose-500/10 text-rose-400 border-rose-500/30' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'" class="p-2.5 rounded-xl border text-xs font-bold flex justify-between">
-                        <span>Cash Mismatch / Variance:</span>
-                        <span>Rs. {{ formatNumber(actualCashInput - currentShift.cashSales) }}</span>
+                    <!-- Reconciliation -->
+                    <div class="p-3.5 rounded-2xl border space-y-2"
+                        :class="cashVariance === 0 ? 'bg-emerald-500/10 border-emerald-500/30' : (cashVariance < 0 ? 'bg-rose-500/10 border-rose-500/40' : 'bg-amber-500/10 border-amber-500/40')">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-300 font-semibold">Total Physical Cash in Hand:</span>
+                            <span class="font-black text-white text-sm">Rs. {{ formatNumber(countedDrawerCash) }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs pt-1.5 border-t border-slate-800">
+                            <span class="font-bold" :class="cashVariance === 0 ? 'text-emerald-400' : (cashVariance < 0 ? 'text-rose-400' : 'text-amber-400')">
+                                {{ cashVariance === 0 ? '✓ Balanced (නියමිත ගණන හරි)' : (cashVariance < 0 ? '⚠ Shortage (ලාච්චුවේ මුදල් අඩුයි)' : '⚠ Surplus (ලාච්චුවේ මුදල් වැඩියි)') }}
+                            </span>
+                            <span class="font-black text-sm" :class="cashVariance === 0 ? 'text-emerald-400' : (cashVariance < 0 ? 'text-rose-400' : 'text-amber-400')">
+                                Rs. {{ formatNumber(cashVariance) }}
+                            </span>
+                        </div>
                     </div>
 
-                    <button @click="finalizeShiftClose" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-black py-2.5 rounded-xl transition shadow-lg shadow-rose-500/20 mt-3">
-                        Close Shift & Print Z-Report
+                    <button @click="finalizeShiftClose" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-black py-3 rounded-2xl transition shadow-lg shadow-rose-500/20 text-xs flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock"></i> Close Shift & Settle Z-Report
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- 3. ADD/EDIT DISH MODAL -->
+        <!-- 6. TRANSFER / SHIFT TABLE MODAL -->
+        <div v-if="showTransferModal" class="fixed inset-0 bg-dark-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <div class="bg-dark-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl relative">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-right-left text-cyan-400"></i> Shift / Transfer Table
+                    </h3>
+                    <button type="button" @click="showTransferModal = false" class="text-slate-400 hover:text-white p-1 text-lg"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                
+                <div class="space-y-4 text-xs">
+                    <div>
+                        <label class="block text-slate-300 font-semibold mb-1.5">මාරු කළ යුතු මේසය (Source Table) *</label>
+                        <select v-model="transferForm.fromTable" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-rose-400 font-black focus:outline-none focus:border-cyan-500 text-sm">
+                            <option v-for="t in occupiedTables" :key="t.id" :value="t.name">
+                                {{ t.name }} (Rs. {{ formatNumber(t.currentBill) }})
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex justify-center text-slate-500 my-1">
+                        <i class="fa-solid fa-arrow-down text-lg text-cyan-400 animate-bounce"></i>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-slate-300 font-semibold mb-1.5">මාරු වන නව මේසය (Destination Table) *</label>
+                        <select v-model="transferForm.toTable" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-emerald-400 font-black focus:outline-none focus:border-cyan-500 text-sm">
+                            <option v-for="t in availableTables" :key="t.id" :value="t.name">
+                                {{ t.name }} ({{ t.floor }} - Seats: {{ t.capacity }})
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <div class="pt-4 flex gap-3">
+                        <button type="button" @click="showTransferModal = false" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-xl transition">Cancel</button>
+                        <button type="button" @click="executeTableTransfer" class="flex-1 bg-cyan-500 hover:bg-cyan-400 text-dark-950 font-black py-3 rounded-xl transition shadow-lg shadow-cyan-500/20 text-sm">
+                            Confirm Shift
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. MANAGE DINING AREAS & FLOORS MODAL -->
+        <div v-if="showFloorModal" class="fixed inset-0 bg-dark-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <div class="bg-dark-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl relative">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-emerald-400"></i> Manage Dining Floors & Sections
+                    </h3>
+                    <button type="button" @click="showFloorModal = false" class="text-slate-400 hover:text-white p-1 text-lg"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="flex gap-2 mb-4">
+                    <input v-model="newFloorInput" @keyup.enter="addNewFloor" type="text" placeholder="e.g. VIP Lounge, Beach Side, AC Room 2" 
+                        class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-100 font-bold focus:outline-none focus:border-emerald-500">
+                    <button @click="addNewFloor" type="button" class="bg-emerald-500 hover:bg-emerald-600 text-dark-950 px-4 py-2 rounded-xl text-xs font-black transition">
+                        + Add Area
+                    </button>
+                </div>
+
+                <div class="max-h-64 overflow-y-auto custom-scroll space-y-2 pr-1">
+                    <div v-for="(f, idx) in floors" :key="f" class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-chair text-slate-500"></i>
+                            <span class="font-bold text-slate-200">{{ f }}</span>
+                            <span class="text-[10px] text-slate-500 font-mono">({{ getFloorTableCount(f) }} Tables)</span>
+                        </div>
+                        <button @click="deleteFloor(idx, f)" class="text-slate-500 hover:text-rose-400 p-1.5 transition" title="Delete Area">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. ADD / EDIT TABLE MODAL -->
+        <div v-if="showTableModal" class="fixed inset-0 bg-dark-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <div class="bg-dark-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl relative">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chair text-emerald-400"></i> {{ tableForm.id ? 'Edit Table Details' : 'Add New Dining Table' }}
+                    </h3>
+                    <button type="button" @click="showTableModal = false" class="text-slate-400 hover:text-white p-1 text-lg"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                
+                <div class="space-y-4 text-xs">
+                    <div>
+                        <label class="block text-slate-300 font-semibold mb-1.5">Table Identifier / Code *</label>
+                        <input v-model="tableForm.name" type="text" placeholder="e.g. T-01, VIP-A, BAR-1" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-100 font-bold focus:outline-none focus:border-emerald-500 text-sm">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-slate-300 font-semibold mb-1.5">Dining Floor *</label>
+                            <select v-model="tableForm.floor" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 font-bold focus:outline-none focus:border-emerald-500">
+                                <option v-for="f in floors" :key="f" :value="f">{{ f }}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 font-semibold mb-1.5">Max Seating (Pax) *</label>
+                            <input v-model.number="tableForm.capacity" type="number" min="1" max="100" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-100 font-bold focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+                    <div class="pt-4 flex gap-3">
+                        <button type="button" @click="showTableModal = false" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-xl transition">Cancel</button>
+                        <button type="button" @click.stop.prevent="saveTable" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-dark-950 font-black py-3 rounded-xl transition shadow-lg shadow-emerald-500/20 text-sm">
+                            <i class="fa-solid fa-check mr-1"></i> Save Table
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. ADD / EDIT DISH MODAL -->
         <div v-if="showDishModal" class="fixed inset-0 bg-dark-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div class="bg-dark-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
@@ -633,19 +1116,27 @@
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-slate-400 mb-1">Category</label>
-                            <select v-model="dishForm.category" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 font-bold">
+                            <label class="block text-slate-300 font-semibold mb-1">Category *</label>
+                            <select v-model="dishForm.category" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 font-bold focus:border-emerald-500">
                                 <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-slate-400 mb-1">Price (LKR)</label>
-                            <input v-model.number="dishForm.price" required type="number" step="10" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 font-bold text-emerald-400">
+                            <label class="block text-slate-300 font-semibold mb-1">Kitchen Station *</label>
+                            <select v-model="dishForm.station" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-amber-400 font-bold focus:border-emerald-500">
+                                <option v-for="st in kitchenStations" :key="st" :value="st">{{ st }}</option>
+                            </select>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1">Portion</label>
-                        <input v-model="dishForm.portion" type="text" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-slate-300 font-semibold mb-1">Selling Price (LKR) *</label>
+                            <input v-model.number="dishForm.price" required type="number" step="10" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-emerald-400 font-black focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 font-semibold mb-1">Portion Size</label>
+                            <input v-model="dishForm.portion" type="text" placeholder="Regular / Large" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:border-emerald-500">
+                        </div>
                     </div>
                     <div class="pt-4 flex gap-2">
                         <button type="button" @click="showDishModal = false" class="flex-1 bg-slate-800 text-white font-bold py-2.5 rounded-xl">Cancel</button>
@@ -655,7 +1146,7 @@
             </div>
         </div>
 
-        <!-- 4. CATEGORY MODAL -->
+        <!-- 10. CATEGORY MODAL -->
         <div v-if="showCategoryModal" class="fixed inset-0 bg-dark-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div class="bg-dark-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
@@ -677,51 +1168,156 @@
             </div>
         </div>
 
-        <!-- 5. CHECKOUT & LANKAQR -->
-        <div v-if="showCheckout" class="fixed inset-0 bg-dark-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div class="bg-dark-900 border border-slate-800 w-full max-w-xl rounded-3xl p-6 shadow-2xl">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
-                    <h3 class="text-base font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-cash-register text-emerald-400"></i> Checkout (Rs. {{ formatNumber(finalPayable) }})
-                    </h3>
-                    <button @click="showCheckout = false" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 text-center flex flex-col items-center justify-center">
-                        <span class="text-xs text-slate-400 font-medium">LankaQR Dynamic Pay</span>
-                        <div id="qrcode-box" class="p-2 bg-white rounded-xl my-2"></div>
-                        <span class="text-[10px] text-emerald-400 font-mono">Scan via Commercial Bank / FriMi</span>
+        <!-- 11. ADVANCED CHECKOUT & SPLIT PAYMENT MODAL -->
+        <div v-if="showCheckout" class="fixed inset-0 bg-dark-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <div class="bg-dark-900 border border-slate-800 w-full max-w-xl rounded-3xl p-5 sm:p-6 shadow-2xl max-h-[95vh] flex flex-col">
+                
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-3">
+                    <div>
+                        <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Order Settlement</span>
+                        <h3 class="text-lg font-black text-white flex items-center gap-2">
+                            Total Due: <span class="text-emerald-400">Rs. {{ formatNumber(finalPayable) }}</span>
+                        </h3>
                     </div>
-                    <div class="flex flex-col justify-between space-y-2">
-                        <div class="space-y-1.5">
-                            <button @click="completePayment('CASH')" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-xl text-xs transition text-left px-3 flex justify-between">
-                                <span><i class="fa-solid fa-money-bill mr-2 text-emerald-400"></i> Cash Payment</span>
+                    <button type="button" @click="showCheckout = false" class="text-slate-400 hover:text-white p-1 text-lg"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="flex gap-2 mb-4 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                    <button @click="payTab = 'SINGLE'" 
+                        :class="payTab === 'SINGLE' ? 'bg-emerald-500 text-dark-950 font-black shadow-md' : 'text-slate-400 hover:text-white'"
+                        class="flex-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-bolt"></i> Single Pay
+                    </button>
+                    <button @click="payTab = 'SPLIT'" 
+                        :class="payTab === 'SPLIT' ? 'bg-cyan-500 text-dark-950 font-black shadow-md' : 'text-slate-400 hover:text-white'"
+                        class="flex-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-scissors"></i> Split Pay (Cash + Card)
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto custom-scroll space-y-4">
+                    <!-- Customer Summary Bar inside Pay Screen -->
+<div v-if="orderType !== 'Dine-In'" class="bg-slate-950 p-3 rounded-2xl border border-amber-500/30 space-y-1.5 text-xs">
+    <div class="flex justify-between items-center">
+        <span class="font-extrabold text-amber-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-motorcycle"></i> {{ orderType }} Customer Information
+        </span>
+        <span v-if="customer.phone" class="text-emerald-400 font-bold font-mono">{{ customer.phone }}</span>
+    </div>
+    <div class="grid grid-cols-2 gap-2 pt-1">
+        <input v-model="customer.name" type="text" placeholder="Customer Name" class="bg-dark-900 border border-slate-800 rounded-lg px-2.5 py-1 text-slate-200 text-xs font-semibold">
+        <input v-model="customer.phone" type="tel" placeholder="Phone Number" class="bg-dark-900 border border-slate-800 rounded-lg px-2.5 py-1 text-emerald-400 text-xs font-bold font-mono">
+    </div>
+    <input v-if="orderType === 'Delivery'" v-model="customer.address" type="text" placeholder="Delivery Address for Dispatch..." class="w-full bg-dark-900 border border-slate-800 rounded-lg px-2.5 py-1 text-amber-300 text-xs">
+</div>
+                    
+                    <!-- Single Pay -->
+                    <div v-if="payTab === 'SINGLE'" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 text-center flex flex-col items-center justify-center">
+                            <span class="text-[11px] text-slate-400 font-bold">LankaQR Quick Pay</span>
+                            <div id="qrcode-box" class="p-2 bg-white rounded-xl my-2"></div>
+                            <button @click="completePayment('LANKAQR')" class="w-full bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-dark-950 border border-amber-500/30 py-1.5 rounded-xl text-xs font-black transition">
+                                <i class="fa-solid fa-qrcode mr-1"></i> Settle via LankaQR
                             </button>
-                            <button @click="completePayment('CARD')" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-xl text-xs transition text-left px-3 flex justify-between">
-                                <span><i class="fa-solid fa-credit-card mr-2 text-blue-400"></i> Card (Visa/Master)</span>
-                            </button>
-                            <button @click="completePayment('LANKAQR')" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-xl text-xs transition text-left px-3 flex justify-between">
-                                <span><i class="fa-solid fa-qrcode mr-2 text-amber-400"></i> LankaQR Verified</span>
+                        </div>
+
+                        <div class="space-y-3 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+                                    <label class="block text-[11px] text-slate-300 font-bold">Cash Received (ලැබුණු මුදල)</label>
+                                    <input v-model.number="cashTendered" type="number" step="100" class="w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-emerald-400 font-black focus:outline-none focus:border-emerald-500">
+                                    <div class="flex justify-between items-center text-xs font-bold pt-1 border-t border-slate-800">
+                                        <span class="text-slate-400">Change Due (ඉතිරි):</span>
+                                        <span class="text-cyan-400 text-sm font-black">Rs. {{ formatNumber(cashChangeDue) }}</span>
+                                    </div>
+                                    <button @click="completePayment('CASH')" :disabled="cashTendered < finalPayable" class="w-full bg-emerald-500 hover:bg-emerald-400 text-dark-950 font-black py-2 rounded-xl text-xs transition disabled:opacity-40">
+                                        <i class="fa-solid fa-money-bill mr-1"></i> Pay with Cash
+                                    </button>
+                                </div>
+
+                                <button @click="completePayment('CARD')" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20">
+                                    <i class="fa-solid fa-credit-card"></i> Pay with Card (Visa / Master)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Split Pay -->
+                    <div v-if="payTab === 'SPLIT'" class="space-y-3">
+                        <div class="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 space-y-3">
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label class="block text-[11px] text-slate-400 font-bold mb-1">Cash (LKR)</label>
+                                    <input v-model.number="splitPay.cash" type="number" step="50" class="w-full bg-dark-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-emerald-400 font-black focus:border-cyan-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] text-slate-400 font-bold mb-1">Card (LKR)</label>
+                                    <input v-model.number="splitPay.card" type="number" step="50" class="w-full bg-dark-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-blue-400 font-black focus:border-cyan-500">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] text-slate-400 font-bold mb-1">LankaQR (LKR)</label>
+                                    <input v-model.number="splitPay.qr" type="number" step="50" class="w-full bg-dark-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-amber-400 font-black focus:border-cyan-500">
+                                </div>
+                            </div>
+
+                            <div class="p-2.5 rounded-xl border space-y-1 text-xs"
+                                :class="splitRemaining === 0 ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-rose-500/10 border-rose-500/30'">
+                                <div class="flex justify-between text-slate-300">
+                                    <span>Total Split Entered:</span>
+                                    <span class="font-black text-white">Rs. {{ formatNumber(totalSplitPaid) }}</span>
+                                </div>
+                                <div class="flex justify-between font-black" :class="splitRemaining === 0 ? 'text-emerald-400' : 'text-rose-400'">
+                                    <span>{{ splitRemaining === 0 ? '✓ Exact Amount Matched' : 'Remaining to Pay (තව ගෙවිය යුතුයි):' }}</span>
+                                    <span>Rs. {{ formatNumber(splitRemaining) }}</span>
+                                </div>
+                                <div v-if="cashChangeDue > 0" class="flex justify-between text-cyan-400 font-black pt-1 border-t border-slate-800">
+                                    <span>Change to Return (ඉතිරි දිය යුතුයි):</span>
+                                    <span>Rs. {{ formatNumber(cashChangeDue) }}</span>
+                                </div>
+                            </div>
+
+                            <button @click="completeSplitPayment" :disabled="splitRemaining > 0" 
+                                class="w-full bg-cyan-500 hover:bg-cyan-400 text-dark-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-lg shadow-cyan-500/20 disabled:opacity-40">
+                                <i class="fa-solid fa-check-double"></i> Complete Split Settlement
                             </button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
 
-        <!-- 6. THERMAL RECEIPT PRINT TEMPLATE -->
+        <!-- 12. TOAST NOTIFICATION -->
+        <div v-if="toast.show" class="fixed top-6 right-6 z-50 bg-emerald-500 text-dark-950 px-5 py-3 rounded-2xl shadow-2xl font-black text-xs flex items-center gap-2.5 border border-emerald-400 animate-bounce">
+            <i class="fa-solid fa-circle-check text-base"></i>
+            <span>{{ toast.message }}</span>
+        </div>
+
+        <!-- 13. THERMAL RECEIPT PRINT TEMPLATE -->
         <div id="thermal-receipt" class="hidden">
             <div style="text-align: center; border-bottom: 1px dashed black; padding-bottom: 5px;">
                 <h2 style="font-size: 16px; font-weight: bold; margin: 0;">{{ config.general.restaurantName }}</h2>
                 <p style="font-size: 10px; margin: 2px 0;">No 45, Duplication Road, Colombo 03</p>
                 <p style="font-size: 10px; margin: 2px 0;">Tel: +94 11 250 8899 | VAT: 409128391</p>
+                <div style="font-weight: bold; font-size: 11px; margin-top: 3px; border: 1px solid black; padding: 2px;">
+                    {{ isPreBill ? '*** TABLE PRE-BILL / ESTIMATE ***' : '*** FINAL TAX INVOICE ***' }}
+                </div>
             </div>
             <div style="font-size: 10px; padding: 4px 0; border-bottom: 1px dashed black;">
-                <div>Bill No: #INV-{{ lastInvoice.id }}</div>
-                <div>Date: {{ lastInvoice.date }}</div>
-                <div>Cashier: {{ currentUser.name }} | Mode: {{ orderType }}</div>
-                <div v-if="orderType === 'Dine-In'">Table: {{ currentTable || 'Table 01' }}</div>
-            </div>
+    <div>Bill No: #INV-{{ lastInvoice.id }}</div>
+    <div>Date: {{ lastInvoice.date }}</div>
+    <div>Staff: {{ currentUser.name }} | Mode: {{ lastInvoice.orderType || orderType }}</div>
+    <div v-if="lastInvoice.orderType === 'Dine-In'">Table: {{ lastInvoice.table || currentTable || 'Table Quick' }}</div>
+    
+    <!-- CUSTOMER & DELIVERY DISPATCH INFO -->
+    <div v-if="lastInvoice.customer && lastInvoice.customer.phone" style="margin-top: 3px; padding-top: 3px; border-top: 1px dotted black;">
+        <div><strong>Customer:</strong> {{ lastInvoice.customer.name || 'Valued Guest' }} ({{ lastInvoice.customer.phone }})</div>
+        <div v-if="lastInvoice.customer.landmark"><strong>Area/Landmark:</strong> {{ lastInvoice.customer.landmark }}</div>
+        <div v-if="lastInvoice.customer.address" style="font-weight: bold; background: #eee; padding: 2px; margin-top: 2px;">
+            Delivery to: {{ lastInvoice.customer.address }}
+        </div>
+    </div>
+</div>
             <table style="width: 100%; font-size: 10px; border-collapse: collapse; margin: 5px 0;">
                 <thead>
                     <tr style="border-bottom: 1px solid black; text-align: left;">
@@ -732,25 +1328,60 @@
                 </thead>
                 <tbody>
                     <tr v-for="it in lastInvoice.items" :key="it.name">
-                        <td>{{ it.name }}</td>
+                        <td>
+                            {{ it.name }}
+                            <div v-if="it.note" style="font-size: 8px; font-style: italic;">* {{ it.note }}</div>
+                        </td>
                         <td style="text-align: center;">{{ it.qty }}</td>
                         <td style="text-align: right;">{{ formatNumber(it.price * it.qty) }}</td>
                     </tr>
                 </tbody>
             </table>
-            <div style="border-top: 1px dashed black; padding-top: 4px; font-size: 11px;">
+            <div style="border-top: 1px dashed black; padding-top: 4px; font-size: 10px;">
                 <div style="display: flex; justify-content: space-between;">
                     <span>Subtotal:</span><span>Rs. {{ formatNumber(lastInvoice.subtotal) }}</span>
                 </div>
-                <div v-if="lastInvoice.service > 0" style="display: flex; justify-content: space-between;">
-                    <span>Service Charge:</span><span>Rs. {{ formatNumber(lastInvoice.service) }}</span>
+                <div v-if="lastInvoice.discountAmount > 0" style="display: flex; justify-content: space-between; font-weight: bold;">
+                    <span>Discount ({{ lastInvoice.discountReason }}):</span><span>- Rs. {{ formatNumber(lastInvoice.discountAmount) }}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 13px; margin-top: 4px;">
+                <div v-if="lastInvoice.service > 0" style="display: flex; justify-content: space-between;">
+                    <span>Service Charge ({{ config.charges.serviceChargePercent }}%):</span><span>Rs. {{ formatNumber(lastInvoice.service) }}</span>
+                </div>
+                <div v-if="lastInvoice.packaging > 0" style="display: flex; justify-content: space-between;">
+                    <span>Packaging Fee:</span><span>Rs. {{ formatNumber(lastInvoice.packaging) }}</span>
+                </div>
+                <div v-if="lastInvoice.sscl > 0" style="display: flex; justify-content: space-between;">
+                    <span>SSCL Tax ({{ config.charges.ssclPercent }}%):</span><span>Rs. {{ formatNumber(lastInvoice.sscl) }}</span>
+                </div>
+                <div v-if="lastInvoice.vat > 0" style="display: flex; justify-content: space-between;">
+                    <span>Govt VAT ({{ config.charges.vatPercent }}%):</span><span>Rs. {{ formatNumber(lastInvoice.vat) }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 12px; margin-top: 4px; border-top: 1px solid black; padding-top: 2px;">
                     <span>NET TOTAL:</span><span>Rs. {{ formatNumber(lastInvoice.total) }}</span>
+                </div>
+                
+                <div v-if="lastInvoice.payMode === 'SPLIT'" style="margin-top: 4px; padding-top: 3px; border-top: 1px dashed black; font-size: 9px;">
+                    <div style="font-weight: bold; margin-bottom: 2px;">PAYMENT BREAKDOWN:</div>
+                    <div v-if="lastInvoice.cashPaid > 0" style="display: flex; justify-content: space-between;">
+                        <span>Cash Paid:</span><span>Rs. {{ formatNumber(lastInvoice.cashPaid) }}</span>
+                    </div>
+                    <div v-if="lastInvoice.cardPaid > 0" style="display: flex; justify-content: space-between;">
+                        <span>Card Paid:</span><span>Rs. {{ formatNumber(lastInvoice.cardPaid) }}</span>
+                    </div>
+                    <div v-if="lastInvoice.qrPaid > 0" style="display: flex; justify-content: space-between;">
+                        <span>LankaQR Paid:</span><span>Rs. {{ formatNumber(lastInvoice.qrPaid) }}</span>
+                    </div>
+                    <div v-if="lastInvoice.change > 0" style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 2px;">
+                        <span>Change Given:</span><span>Rs. {{ formatNumber(lastInvoice.change) }}</span>
+                    </div>
+                </div>
+                <div v-else-if="lastInvoice.change > 0" style="display: flex; justify-content: space-between; font-size: 9px; margin-top: 3px; border-top: 1px dashed black; padding-top: 2px;">
+                    <span>Change Returned:</span><span>Rs. {{ formatNumber(lastInvoice.change) }}</span>
                 </div>
             </div>
             <div style="text-align: center; margin-top: 10px; font-size: 10px;">
-                <p>ස්තූතියි! නැවත පැමිණෙන්න.</p>
+                <p v-if="isPreBill" style="font-weight: bold;">(මෙය ගෙවීම් බිල්පතක් නොවේ - ESTIMATE ONLY)</p>
+                <p v-else>ස්තූතියි! නැවත පැමිණෙන්න.</p>
                 <p style="font-size: 8px;">Software by APEXRESTRO ENTERPRISE</p>
             </div>
         </div>
@@ -780,28 +1411,68 @@
                     selectedCategory: 'All',
                     orderType: 'Dine-In',
                     currentTable: '',
+                    customer: { phone: '', name: '', address: '', landmark: '', notes: '' },
+    customerMatches: [],
+    customers: [
+        { phone: '0771234567', name: 'Kamal Perera', address: 'No 24, Station Road, Colombo 03', landmark: 'Near Railway Gate', orderCount: 5 },
+        { phone: '0719876543', name: 'Dilani Silva', address: '12/A, Flower Road, Colombo 07', landmark: 'Opposite Park', orderCount: 2 }
+    ],
                     liveKotNumber: 204,
+                    toast: { show: false, message: '' },
+                    showTableModal: false,
+                    tableForm: { id: null, name: '', floor: 'Main AC Dining', capacity: 4 },
                     showCheckout: false,
+                    showMobileCart: false,
+                    showDiscountModal: false,
+                    showPromoManagerModal: false,
+                    showNoteModal: false,
+                    selectedCartItemForNote: null,
+                    itemNoteInput: '',
+                    quickNoteTags: ['Less Spicy (සැර අඩුවෙන්)', 'Extra Spicy (සැර වැඩියෙන්)', 'No Onion (ළූණු නැතිව)', 'Extra Gravy (හොදි වැඩියෙන්)', 'No Sugar (සීනි නැතිව)', 'Takeaway Pack'],
+                    payTab: 'SINGLE',
+                    cashTendered: 0,
+                    splitPay: { cash: 0, card: 0, qr: 0 },
+                    discount: { type: 'NONE', rate: 0, amount: 0, reason: '' },
+                    isPreBill: false,
+                    promoForm: { id: null, name: '', type: 'PERCENT', value: 10 },
+                    promotions: [
+                        { id: 1, name: 'Commercial Bank Card Offer', type: 'PERCENT', value: 10 },
+                        { id: 2, name: 'HNB Card Special', type: 'PERCENT', value: 15 },
+                        { id: 3, name: 'Sampath Bank Master Promo', type: 'PERCENT', value: 20 },
+                        { id: 4, name: 'VIP Regular Loyalty', type: 'PERCENT', value: 10 }
+                    ],
                     showDishModal: false,
                     showCategoryModal: false,
                     showVoidModal: false,
                     showShiftModal: false,
-                    actualCashInput: null,
+                    actualCashInput: 0,
+                    denominations: { 5000: 0, 1000: 0, 500: 0, 100: 0, 50: 0, 20: 0, coins: 0 },
                     newCategoryInput: '',
                     pendingVoidItem: null,
                     voidForm: { reason: 'Customer Changed Mind', pin: '' },
                     voidLogs: [],
                     currentShift: { id: 101, startTime: new Date().toLocaleTimeString(), cashSales: 0, cardSales: 0, qrSales: 0, totalSales: 0 },
-                    dishForm: { id: null, name: '', category: 'Main Dishes', price: 0, portion: 'Regular' },
+                    kitchenStations: ['Main Kitchen', 'Beverage Bar', 'Dessert Counter', 'Grill & BBQ'],
+                    dishForm: { id: null, name: '', category: 'Main Dishes', station: 'Main Kitchen', price: 0, portion: 'Regular' },
                     config: {
                         general: { restaurantName: 'Ceylon Heritage Restaurant' },
                         ordering: { enableDineIn: true, enableTakeaway: true, enableDelivery: true },
                         kitchen: { enableKitchenModule: true, alertTimeMins: 15 },
-                        charges: { enableServiceCharge: true, serviceChargePercent: 10, enableTax: false, vatPercent: 18, enablePackagingFee: true, packagingFeeAmount: 50 },
+                        charges: {
+                            enableServiceCharge: true,
+                            serviceChargePercent: 10,
+                            enableSSCL: true,
+                            ssclPercent: 2.5,
+                            enableVAT: true,
+                            vatPercent: 18,
+                            enablePackagingFee: true,
+                            packagingFeeAmount: 50
+                        },
                         payments: { enableLankaQr: true, enableCard: true, enableCash: true }
                     },
                     menus: [
                         { id: 'pos', name: 'Billing / POS', icon: 'fa-solid fa-cash-register', roles: ['admin', 'manager', 'cashier', 'waiter'] },
+                        { id: 'tables', name: 'Floor & Tables', icon: 'fa-solid fa-chair', roles: ['admin', 'manager', 'cashier', 'waiter'] },
                         { id: 'menu-mgr', name: 'Menu & Dishes', icon: 'fa-solid fa-utensils', roles: ['admin', 'manager'] },
                         { id: 'kitchen', name: 'Kitchen KDS', icon: 'fa-solid fa-fire-burner', badge: true, roles: ['admin', 'manager', 'cashier'] },
                         { id: 'inventory', name: 'Stock & BOM', icon: 'fa-solid fa-boxes-stacked', roles: ['admin', 'manager'] },
@@ -811,18 +1482,27 @@
                     ],
                     categories: ['Main Dishes', 'Kottu Specials', 'Appetizers', 'Beverages'],
                     products: [
-                        { id: 1, name: 'Special Seafood Fried Rice', price: 1450, category: 'Main Dishes', portion: 'Regular (1:2)', recipe: [{ sku: 'RICE', qty: 0.25 }] },
-                        { id: 2, name: 'Chicken Cheese Kottu', price: 1650, category: 'Kottu Specials', portion: 'Large', recipe: [{ sku: 'ROTI', qty: 4 }, { sku: 'CHICKEN', qty: 0.2 }] },
-                        { id: 3, name: 'Hot Butter Cuttlefish (HBC)', price: 1950, category: 'Appetizers', portion: 'Sharing', recipe: [{ sku: 'CUTTLEFISH', qty: 0.3 }] },
-                        { id: 4, name: 'Iced Milo Dinosaur', price: 550, category: 'Beverages', portion: '350ml Glass', recipe: [{ sku: 'MILO', qty: 0.05 }] },
-                        { id: 5, name: 'Devilled Chicken Full', price: 1800, category: 'Main Dishes', portion: 'Plate', recipe: [{ sku: 'CHICKEN', qty: 0.5 }] }
+                        { id: 1, name: 'Special Seafood Fried Rice', price: 1450, category: 'Main Dishes', portion: 'Regular (1:2)', station: 'Main Kitchen', recipe: [{ sku: 'RICE', qty: 0.25 }] },
+                        { id: 2, name: 'Chicken Cheese Kottu', price: 1650, category: 'Kottu Specials', portion: 'Large', station: 'Main Kitchen', recipe: [{ sku: 'ROTI', qty: 4 }, { sku: 'CHICKEN', qty: 0.2 }] },
+                        { id: 3, name: 'Hot Butter Cuttlefish (HBC)', price: 1950, category: 'Appetizers', portion: 'Sharing', station: 'Main Kitchen', recipe: [{ sku: 'CUTTLEFISH', qty: 0.3 }] },
+                        { id: 4, name: 'Iced Milo Dinosaur', price: 550, category: 'Beverages', portion: '350ml Glass', station: 'Beverage Bar', recipe: [{ sku: 'MILO', qty: 0.05 }] },
+                        { id: 5, name: 'Devilled Chicken Full', price: 1800, category: 'Main Dishes', portion: 'Plate', station: 'Main Kitchen', recipe: [{ sku: 'CHICKEN', qty: 0.5 }] }
                     ],
                     cart: [],
+                    selectedFloor: 'All',
+                    showFloorModal: false,
+                    showTransferModal: false,
+                    transferForm: { fromTable: '', toTable: '' },
+                    newFloorInput: '',
+                    floors: ['Main AC Dining', 'Garden Outdoor', 'Rooftop Lounge', 'VIP Rooms'],
                     tables: [
-                        { id: 1, name: 'T-01', status: 'Available' },
-                        { id: 2, name: 'T-02', status: 'Occupied' },
-                        { id: 3, name: 'T-03', status: 'Available' },
-                        { id: 4, name: 'T-04', status: 'Available' }
+                        { id: 1, name: 'T-01', floor: 'Main AC Dining', capacity: 4, status: 'Available', activeCart: [], openedTime: null, currentBill: 0 },
+                        { id: 2, name: 'T-02', floor: 'Main AC Dining', capacity: 2, status: 'Available', activeCart: [], openedTime: null, currentBill: 0 },
+                        { id: 3, name: 'T-03', floor: 'Main AC Dining', capacity: 6, status: 'Available', activeCart: [], openedTime: null, currentBill: 0 },
+                        { id: 4, name: 'G-01', floor: 'Garden Outdoor', capacity: 4, status: 'Available', activeCart: [], openedTime: null, currentBill: 0 },
+                        { id: 5, name: 'G-02', floor: 'Garden Outdoor', capacity: 8, status: 'Available', activeCart: [], openedTime: null, currentBill: 0 },
+                        { id: 6, name: 'ROOF-01', floor: 'Rooftop Lounge', capacity: 4, status: 'Available', activeCart: [], openedTime: null, currentBill: 0 },
+                        { id: 7, name: 'VIP-01', floor: 'VIP Rooms', capacity: 10, status: 'Available', activeCart: [], openedTime: null, currentBill: 0 }
                     ],
                     ingredients: [
                         { sku: 'RICE', name: 'Kiri Samba Rice', category: 'Grains', stock: 50, minStock: 15, unit: 'kg' },
@@ -837,44 +1517,252 @@
                 }
             },
             computed: {
-                accessibleMenus() { return this.menus.filter(m => m.roles.includes(this.currentUser.role)); },
-                activeTabName() { const m = this.menus.find(x => x.id === this.activeTab); return m ? m.name : ''; },
+                countedDrawerCash() {
+                    if (!this.denominations) return 0;
+                    const d = this.denominations;
+                    return (Number(d[5000] || 0) * 5000) +
+                        (Number(d[1000] || 0) * 1000) +
+                        (Number(d[500] || 0) * 500) +
+                        (Number(d[100] || 0) * 100) +
+                        (Number(d[50] || 0) * 50) +
+                        (Number(d[20] || 0) * 20) +
+                        Number(d.coins || 0);
+                },
+                cashVariance() {
+                    const shiftCash = (this.currentShift && this.currentShift.cashSales) ? this.currentShift.cashSales : 0;
+                    return this.countedDrawerCash - shiftCash;
+                },
+                accessibleMenus() {
+                    if (!this.menus || !Array.isArray(this.menus)) return [];
+                    const role = (this.currentUser && this.currentUser.role) ? this.currentUser.role : 'admin';
+                    return this.menus.filter(m => m && m.roles && m.roles.includes(role));
+                },
+                activeTabName() {
+                    if (!this.menus || !Array.isArray(this.menus)) return '';
+                    const m = this.menus.find(x => x && x.id === this.activeTab);
+                    return m ? m.name : '';
+                },
+                filteredTables() {
+                    if (!this.tables || !Array.isArray(this.tables)) return [];
+                    if (this.selectedFloor === 'All') return this.tables;
+                    return this.tables.filter(t => t && t.floor === this.selectedFloor);
+                },
+                occupiedTables() {
+                    if (!this.tables || !Array.isArray(this.tables)) return [];
+                    return this.tables.filter(t => t && t.status === 'Occupied');
+                },
+                availableTables() {
+                    if (!this.tables || !Array.isArray(this.tables)) return [];
+                    return this.tables.filter(t => t && t.status === 'Available');
+                },
                 activeOrderTypes() {
                     const types = [];
-                    if (this.config.ordering.enableDineIn) types.push('Dine-In');
-                    if (this.config.ordering.enableTakeaway) types.push('Takeaway');
-                    if (this.config.ordering.enableDelivery) types.push('Delivery');
-                    return types.length ? types : ['Takeaway'];
+                    if (this.config && this.config.ordering) {
+                        if (this.config.ordering.enableDineIn) types.push('Dine-In');
+                        if (this.config.ordering.enableTakeaway) types.push('Takeaway');
+                        if (this.config.ordering.enableDelivery) types.push('Delivery');
+                    }
+                    return types.length ? types : ['Dine-In', 'Takeaway'];
                 },
-                currentMenuIcon() { const m = this.menus.find(x => x.id === this.activeTab); return m ? m.icon : ''; },
+                currentMenuIcon() {
+                    if (!this.menus || !Array.isArray(this.menus)) return '';
+                    const m = this.menus.find(x => x && x.id === this.activeTab);
+                    return m ? m.icon : '';
+                },
                 filteredProducts() {
+                    if (!this.products || !Array.isArray(this.products)) return [];
                     return this.products.filter(p => {
+                        if (!p) return false;
                         const matchCat = this.selectedCategory === 'All' || p.category === this.selectedCategory;
-                        const matchSearch = p.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        const matchSearch = p.name ? p.name.toLowerCase().includes((this.searchQuery || '').toLowerCase()) : true;
                         return matchCat && matchSearch;
                     });
                 },
                 cartSubtotal() { return this.cart.reduce((s, i) => s + (i.price * i.qty), 0); },
+                discountAmount() {
+                    if (this.discount.type === 'PERCENT') {
+                        return Math.round((this.cartSubtotal * (this.discount.rate / 100)) * 100) / 100;
+                    } else if (this.discount.type === 'FLAT') {
+                        return Math.min(this.cartSubtotal, this.discount.amount);
+                    }
+                    return 0;
+                },
+                netFoodSubtotal() {
+                    return Math.max(0, this.cartSubtotal - this.discountAmount);
+                },
                 serviceCharge() {
                     if (!this.config.charges.enableServiceCharge || this.orderType !== 'Dine-In') return 0;
-                    return this.cartSubtotal * (this.config.charges.serviceChargePercent / 100);
+                    return Math.round((this.netFoodSubtotal * (this.config.charges.serviceChargePercent / 100)) * 100) / 100;
                 },
                 packagingFee() {
                     if (!this.config.charges.enablePackagingFee || this.orderType === 'Dine-In' || this.cart.length === 0) return 0;
                     return this.config.charges.packagingFeeAmount;
                 },
-                taxAmount() {
-                    if (!this.config.charges.enableTax) return 0;
-                    return this.cartSubtotal * (this.config.charges.vatPercent / 100);
+                taxableBase() {
+                    const base = this.netFoodSubtotal + this.serviceCharge + this.packagingFee;
+                    return Math.round((base + Number.EPSILON) * 100) / 100;
                 },
-                finalPayable() { return this.cartSubtotal + this.serviceCharge + this.packagingFee + this.taxAmount; },
+                ssclAmount() {
+                    if (!this.config.charges.enableSSCL) return 0;
+                    const sscl = this.taxableBase * (this.config.charges.ssclPercent / 100);
+                    return Math.round((sscl + Number.EPSILON) * 100) / 100;
+                },
+                vatAmount() {
+                    if (!this.config.charges.enableVAT) return 0;
+                    const vat = (this.taxableBase + this.ssclAmount) * (this.config.charges.vatPercent / 100);
+                    return Math.round((vat + Number.EPSILON) * 100) / 100;
+                },
+                finalPayable() {
+                    const total = this.taxableBase + this.ssclAmount + this.vatAmount;
+                    return Math.round((total + Number.EPSILON) * 100) / 100;
+                },
                 calculateMargin() {
                     if (!this.financials.grossSales) return 0;
                     return (((this.financials.grossSales - this.financials.cogs) / this.financials.grossSales) * 100).toFixed(1);
+                },
+                totalSplitPaid() {
+                    return Number(this.splitPay.cash || 0) + Number(this.splitPay.card || 0) + Number(this.splitPay.qr || 0);
+                },
+                splitRemaining() {
+                    return Math.max(0, Math.round((this.finalPayable - this.totalSplitPaid) * 100) / 100);
+                },
+                cashChangeDue() {
+                    if (this.payTab === 'SINGLE') {
+                        return Math.max(0, Number(this.cashTendered || 0) - this.finalPayable);
+                    } else {
+                        if (this.totalSplitPaid > this.finalPayable && this.splitPay.cash > 0) {
+                            return Math.round((this.totalSplitPaid - this.finalPayable) * 100) / 100;
+                        }
+                        return 0;
+                    }
                 }
             },
             methods: {
-                // Firebase Multi-Tenant Init
+                setOrderType(type) {
+        this.orderType = type;
+        if (type === 'Dine-In') {
+            this.clearCustomer();
+        }
+    },
+    onPhoneSearch() {
+        const q = (this.customer.phone || '').trim();
+        if (q.length >= 3) {
+            this.customerMatches = this.customers.filter(c => c.phone && c.phone.includes(q));
+        } else {
+            this.customerMatches = [];
+        }
+    },
+    selectCustomer(c) {
+        this.customer = {
+            phone: c.phone || '',
+            name: c.name || '',
+            address: c.address || '',
+            landmark: c.landmark || '',
+            notes: c.notes || ''
+        };
+        this.customerMatches = [];
+        this.triggerToast(`Customer ${c.name} Attached!`);
+    },
+    clearCustomer() {
+        this.customer = { phone: '', name: '', address: '', landmark: '', notes: '' };
+        this.customerMatches = [];
+    },
+    persistCustomers() {
+        if (this.db) {
+            try {
+                const clean = JSON.parse(JSON.stringify(this.customers));
+                this.getTenantRef('customers').set(clean);
+            } catch (e) { console.warn(e); }
+        }
+        this.saveLocalBackup();
+    },
+    saveLocalBackup() {
+        try {
+            const state = {
+                tables: this.tables,
+                currentShift: this.currentShift,
+                financials: this.financials,
+                customers: this.customers,
+                promotions: this.promotions,
+                products: this.products,
+                categories: this.categories,
+                floors: this.floors,
+                ingredients: this.ingredients,
+                liveKdsOrders: this.liveKdsOrders,
+                voidLogs: this.voidLogs,
+                config: this.config,
+                cart: this.cart,
+                orderType: this.orderType,
+                currentTable: this.currentTable,
+                customer: this.customer
+            };
+            localStorage.setItem(`APEX_STATE_${this.restaurantId}`, JSON.stringify(state));
+        } catch (e) { console.warn("Local storage error", e); }
+    },
+    loadLocalBackup() {
+        try {
+            const saved = localStorage.getItem(`APEX_STATE_${this.restaurantId}`);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed.tables && Array.isArray(parsed.tables)) this.tables = parsed.tables;
+                if (parsed.currentShift) this.currentShift = parsed.currentShift;
+                if (parsed.financials) this.financials = parsed.financials;
+                if (parsed.customers && Array.isArray(parsed.customers)) this.customers = parsed.customers;
+                if (parsed.promotions && Array.isArray(parsed.promotions)) this.promotions = parsed.promotions;
+                if (parsed.products && Array.isArray(parsed.products)) this.products = parsed.products;
+                if (parsed.categories && Array.isArray(parsed.categories)) this.categories = parsed.categories;
+                if (parsed.floors && Array.isArray(parsed.floors)) this.floors = parsed.floors;
+                if (parsed.ingredients && Array.isArray(parsed.ingredients)) this.ingredients = parsed.ingredients;
+                if (parsed.liveKdsOrders && Array.isArray(parsed.liveKdsOrders)) this.liveKdsOrders = parsed.liveKdsOrders;
+                if (parsed.voidLogs && Array.isArray(parsed.voidLogs)) this.voidLogs = parsed.voidLogs;
+                if (parsed.config) this.config = parsed.config;
+                if (parsed.cart && Array.isArray(parsed.cart)) this.cart = parsed.cart;
+                if (parsed.orderType) this.orderType = parsed.orderType;
+                if (parsed.currentTable !== undefined) this.currentTable = parsed.currentTable;
+                if (parsed.customer) this.customer = parsed.customer;
+            }
+        } catch (e) { console.warn("Load backup error", e); }
+    },
+    saveOrUpdateCustomerProfile() {
+        const phone = (this.customer.phone || '').trim();
+        if (!phone) return;
+        
+        const existingIdx = this.customers.findIndex(c => c.phone === phone);
+        if (existingIdx !== -1) {
+            this.customers[existingIdx] = {
+                ...this.customers[existingIdx],
+                name: this.customer.name || this.customers[existingIdx].name,
+                address: this.customer.address || this.customers[existingIdx].address,
+                landmark: this.customer.landmark || this.customers[existingIdx].landmark,
+                orderCount: (this.customers[existingIdx].orderCount || 1) + 1,
+                lastOrderDate: new Date().toLocaleDateString()
+            };
+        } else {
+            this.customers.push({
+                phone: phone,
+                name: this.customer.name || 'Valued Customer',
+                address: this.customer.address || '',
+                landmark: this.customer.landmark || '',
+                orderCount: 1,
+                lastOrderDate: new Date().toLocaleDateString()
+            });
+        }
+        this.persistCustomers();
+    },
+                selectTableForOrder(table) {
+                    this.currentTable = table.name;
+                    this.orderType = 'Dine-In';
+                    if (table.activeCart && Array.isArray(table.activeCart) && table.activeCart.length > 0) {
+                        this.cart = JSON.parse(JSON.stringify(table.activeCart));
+                        this.discount = table.discount ? JSON.parse(JSON.stringify(table.discount)) : { type: 'NONE', rate: 0, amount: 0, reason: '' };
+                        this.triggerToast(`Table ${table.name} Active Bill Loaded (Rs. ${this.formatNumber(table.currentBill)})`);
+                    } else {
+                        this.cart = [];
+                        this.discount = { type: 'NONE', rate: 0, amount: 0, reason: '' };
+                        this.triggerToast(`Table ${table.name} Selected`);
+                    }
+                    this.activeTab = 'pos';
+                },
                 initFirebase() {
                     try {
                         if (!firebase.apps.length) {
@@ -903,50 +1791,109 @@
                 setupFirebaseListeners() {
                     if (!this.db) return;
 
-                    // Sync Products
+                    // 1. Sync Realtime Products
                     this.getTenantRef('products').on('value', snap => {
                         const val = snap.val();
-                        if (val) this.products = Array.isArray(val) ? val : Object.values(val);
-                        else this.getTenantRef('products').set(this.products);
+                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
+                        if (list.length > 0) {
+                            this.products = list;
+                        } else {
+                            this.getTenantRef('products').set(this.products);
+                        }
                     });
 
-                    // Sync Categories
+                    // 2. Sync Categories
                     this.getTenantRef('categories').on('value', snap => {
                         const val = snap.val();
-                        if (val) this.categories = Array.isArray(val) ? val : Object.values(val);
-                        else this.getTenantRef('categories').set(this.categories);
+                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
+                        if (list.length > 0) {
+                            this.categories = list;
+                        } else {
+                            this.getTenantRef('categories').set(this.categories);
+                        }
                     });
 
-                    // Sync KDS Orders
+                    // 3. Sync Realtime Dining Floors
+                    this.getTenantRef('floors').on('value', snap => {
+                        const val = snap.val();
+                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
+                        if (list.length > 0) {
+                            this.floors = list;
+                        } else {
+                            this.persistFloors();
+                        }
+                    });
+
+                    // 4. Sync Realtime Table Floor Plan
+                    this.getTenantRef('tables').on('value', snap => {
+                        const val = snap.val();
+                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(t => t && t.name) : [];
+                        if (list.length > 0) {
+                            this.tables = list;
+                        } else {
+                            this.persistTables();
+                        }
+                    });
+
+                    // 5. Sync Live KDS Orders
                     this.getTenantRef('kds_orders').on('value', snap => {
                         const val = snap.val();
-                        if (val) this.liveKdsOrders = Array.isArray(val) ? val : Object.values(val);
+                        if (val) this.liveKdsOrders = (Array.isArray(val) ? val : Object.values(val)).filter(Boolean);
                         else this.liveKdsOrders = [];
                     });
 
-                    // Sync Ingredients
+                    // 6. Sync Ingredients
                     this.getTenantRef('ingredients').on('value', snap => {
                         const val = snap.val();
-                        if (val) this.ingredients = Array.isArray(val) ? val : Object.values(val);
-                        else this.getTenantRef('ingredients').set(this.ingredients);
+                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
+                        if (list.length > 0) {
+                            this.ingredients = list;
+                        } else {
+                            this.getTenantRef('ingredients').set(this.ingredients);
+                        }
                     });
 
-                    // Sync Void Logs
+                    // 7. Sync Dynamic Restaurant Promotions
+                    this.getTenantRef('promotions').on('value', snap => {
+                        const val = snap.val();
+                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
+                        if (list.length > 0) {
+                            this.promotions = list;
+                        } else {
+                            this.persistPromotions();
+                        }
+                    });
+
+                    // 8. Sync Void Logs
                     this.getTenantRef('voidLogs').on('value', snap => {
                         const val = snap.val();
-                        if (val) this.voidLogs = Array.isArray(val) ? val : Object.values(val);
+                        if (val) this.voidLogs = (Array.isArray(val) ? val : Object.values(val)).filter(Boolean);
                     });
 
-                    // Sync Financials
+                    // 9. Sync Financials
                     this.getTenantRef('financials/grossSales').on('value', snap => {
                         const val = snap.val();
-                        if (val !== null) this.financials.grossSales = val;
+                        if (val !== null && val !== undefined) this.financials.grossSales = Number(val);
                     });
+                    // Sync Current Shift from Cloud
+this.getTenantRef('currentShift').on('value', snap => {
+    const val = snap.val();
+    if (val) this.currentShift = val;
+});
+                    // 10. Sync Realtime Customer Database (CRM)
+this.getTenantRef('customers').on('value', snap => {
+    const val = snap.val();
+    const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
+    if (list.length > 0) {
+        this.customers = list;
+    } else {
+        this.persistCustomers();
+    }
+});
                 },
                 saveConfigToCloud() {
                     if (this.db) this.getTenantRef('config').set(this.config);
                 },
-                // PIN
                 pressPin(n) { if (this.enteredPin.length < 4) this.enteredPin += n; if (this.enteredPin.length === 4) this.submitPin(); },
                 clearPin() { this.enteredPin = ''; },
                 submitPin() {
@@ -962,7 +1909,6 @@
                     }
                 },
                 lockTerminal() { this.isLocked = true; this.clearPin(); },
-                // Void Security
                 requestItemVoid(idx, item) {
                     if (this.currentUser.role === 'admin' || this.currentUser.role === 'manager') {
                         this.executeVoid(idx, item, this.currentUser.name, 'Manager Direct Removal');
@@ -993,93 +1939,367 @@
                     this.cart.splice(idx, 1);
                     if (this.db) this.getTenantRef('voidLogs').set(this.voidLogs);
                 },
-                // Billing & Kitchen
                 formatNumber(val) { return Number(val || 0).toLocaleString('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); },
                 getBadgeCount(tabId) { return tabId === 'kitchen' ? this.liveKdsOrders.length : 0; },
+                openItemNoteModal(item) {
+                    this.selectedCartItemForNote = item;
+                    this.itemNoteInput = item.note || '';
+                    this.showNoteModal = true;
+                },
+                addQuickTag(tag) {
+                    if (this.itemNoteInput) this.itemNoteInput += ', ' + tag;
+                    else this.itemNoteInput = tag;
+                },
+                saveItemNote() {
+                    if (this.selectedCartItemForNote) {
+                        this.selectedCartItemForNote.note = this.itemNoteInput.trim();
+                        if (this.orderType === 'Dine-In' && this.currentTable) {
+                            const tbl = this.tables.find(t => t.name === this.currentTable);
+                            if (tbl) {
+                                tbl.activeCart = JSON.parse(JSON.stringify(this.cart));
+                                this.persistTables();
+                            }
+                        }
+                    }
+                    this.showNoteModal = false;
+                    this.triggerToast("Kitchen Instruction Added!");
+                },
                 addToCart(p) {
-                    const f = this.cart.find(i => i.id === p.id);
-                    if (f) f.qty++; else this.cart.push({ ...p, qty: 1 });
+                    const existingUnfired = this.cart.find(i => i.id === p.id && !i.isFired);
+                    if (existingUnfired) {
+                        existingUnfired.qty++;
+                    } else {
+                        this.cart.push({
+                            ...p,
+                            qty: 1,
+                            isFired: false,
+                            firedAt: null
+                        });
+                    }
+                    this.triggerToast(`${p.name} added to cart`);
                 },
                 adjustQty(item, diff) {
+                    if (item.isFired && diff < 0) {
+                        const idx = this.cart.indexOf(item);
+                        this.requestItemVoid(idx, item);
+                        return;
+                    }
                     item.qty += diff;
                     if (item.qty <= 0) {
                         const idx = this.cart.indexOf(item);
-                        this.requestItemVoid(idx, item);
+                        this.cart.splice(idx, 1);
                     }
                 },
                 fireKOT() {
+                    if (!this.cart || this.cart.length === 0) return;
+                    const pendingItems = this.cart.filter(item => !item.isFired);
+                    if (pendingItems.length === 0) {
+                        this.triggerToast("සියලුම කෑම දැනටමත් Kitchen එකට යවා ඇත!");
+                        return;
+                    }
+                    
+                    const kotId = Math.floor(100 + Math.random() * 900);
                     const newKot = {
-                        id: Math.floor(100 + Math.random() * 900),
-                        table: this.currentTable,
+                        id: kotId,
+                        table: this.orderType === 'Dine-In' ? (this.currentTable || 'Table Quick') : this.orderType,
                         type: this.orderType,
-                        items: JSON.parse(JSON.stringify(this.cart))
+                        items: JSON.parse(JSON.stringify(pendingItems)),
+                        orderTime: new Date().toLocaleTimeString()
                     };
+                    
                     this.liveKdsOrders.push(newKot);
-                    if (this.db) this.getTenantRef('kds_orders').set(this.liveKdsOrders);
-
-                    // Deplete Inventory BOM
-                    this.cart.forEach(cItem => {
-                        if (cItem.recipe) {
+                    if (this.db) {
+                        try {
+                            this.getTenantRef('kds_orders').set(this.liveKdsOrders);
+                        } catch (e) { console.warn(e); }
+                    }
+                    
+                    pendingItems.forEach(cItem => {
+                        if (cItem.recipe && Array.isArray(cItem.recipe)) {
                             cItem.recipe.forEach(rec => {
                                 const ing = this.ingredients.find(i => i.sku === rec.sku);
-                                if (ing) ing.stock = Math.max(0, ing.stock - (rec.qty * cItem.qty));
+                                if (ing) {
+                                    ing.stock = Math.max(0, Math.round((ing.stock - (rec.qty * cItem.qty)) * 100) / 100);
+                                }
                             });
                         }
                     });
-                    if (this.db) this.getTenantRef('ingredients').set(this.ingredients);
-
-                    alert(`KOT #${newKot.id} dispatched to Kitchen!`);
+                    if (this.db) {
+                        try {
+                            this.getTenantRef('ingredients').set(this.ingredients);
+                        } catch (e) { console.warn(e); }
+                    }
+                    
+                    this.cart.forEach(item => {
+                        item.isFired = true;
+                        if (!item.firedAt) item.firedAt = new Date().toLocaleTimeString();
+                    });
+                    
+                    if (this.orderType === 'Dine-In' && this.currentTable) {
+                        const tbl = this.tables.find(t => t.name === this.currentTable);
+                        if (tbl) {
+                            tbl.status = 'Occupied';
+                            tbl.activeCart = JSON.parse(JSON.stringify(this.cart));
+                            tbl.currentBill = this.finalPayable;
+                            if (!tbl.openedTime) tbl.openedTime = new Date().toLocaleTimeString();
+                            this.persistTables();
+                        }
+                    }
+                    
+                    this.triggerToast(`🔥 KOT #${kotId} (${pendingItems.length} New Items) Sent to Kitchen!`);
                 },
                 completeKOT(kotId) {
                     this.liveKdsOrders = this.liveKdsOrders.filter(k => k.id !== kotId);
                     if (this.db) this.getTenantRef('kds_orders').set(this.liveKdsOrders);
                 },
-                openCheckoutModal() {
-                    this.showCheckout = true;
-                    this.$nextTick(() => {
-                        const qr = document.getElementById("qrcode-box");
-                        if (qr) {
-                            qr.innerHTML = "";
-                            new QRCode(qr, { text: `LANKAQR|RESTRO|AMOUNT:${this.finalPayable}|CUR:LKR`, width: 120, height: 120 });
+                persistPromotions() {
+                    const cleanPromos = JSON.parse(JSON.stringify(this.promotions));
+                    if (this.db) this.getTenantRef('promotions').set(cleanPromos);
+                },
+                openPromoManager() {
+                    this.promoForm = { id: null, name: '', type: 'PERCENT', value: 10 };
+                    this.showDiscountModal = false;
+                    this.showPromoManagerModal = true;
+                },
+                savePromotion() {
+                    const name = this.promoForm.name ? this.promoForm.name.trim() : '';
+                    if (!name) { alert("Please enter offer name!"); return; }
+                    const val = Number(this.promoForm.value) || 0;
+                    if (val <= 0) { alert("Please enter valid discount amount!"); return; }
+                    
+                    if (this.promoForm.id) {
+                        const idx = this.promotions.findIndex(p => p.id === this.promoForm.id);
+                        if (idx !== -1) this.promotions[idx] = { id: this.promoForm.id, name, type: this.promoForm.type, value: val };
+                    } else {
+                        this.promotions.push({ id: Date.now(), name, type: this.promoForm.type, value: val });
+                    }
+                    this.persistPromotions();
+                    this.showPromoManagerModal = false;
+                    this.showDiscountModal = true;
+                    this.triggerToast("Promotion Saved Successfully!");
+                },
+                deletePromotion(id) {
+                    if (confirm("Delete this promotion?")) {
+                        this.promotions = this.promotions.filter(p => p.id !== id);
+                        this.persistPromotions();
+                        this.triggerToast("Promotion Deleted!");
+                    }
+                },
+                openDiscountModal() { this.showDiscountModal = true; },
+                applyDiscount(type, rate, amount, reason) {
+                    this.discount = { type, rate: Number(rate || 0), amount: Number(amount || 0), reason: reason || 'Custom Promo' };
+                    this.showDiscountModal = false;
+                    this.triggerToast(`✓ Discount Applied: ${this.discount.reason}`);
+                    
+                    if (this.orderType === 'Dine-In' && this.currentTable) {
+                        const tbl = this.tables.find(t => t.name === this.currentTable);
+                        if (tbl) {
+                            tbl.discount = JSON.parse(JSON.stringify(this.discount));
+                            tbl.currentBill = this.finalPayable;
+                            this.persistTables();
                         }
-                    });
+                    }
                 },
-                completePayment(mode) {
-                    this.lastInvoice = {
-                        id: Math.floor(1000 + Math.random() * 9000),
-                        date: new Date().toLocaleTimeString(),
-                        items: [...this.cart],
-                        subtotal: this.cartSubtotal,
-                        service: this.serviceCharge,
-                        total: this.finalPayable
-                    };
-
-                    if (mode === 'CASH') this.currentShift.cashSales += this.finalPayable;
-                    else if (mode === 'CARD') this.currentShift.cardSales += this.finalPayable;
-                    else if (mode === 'LANKAQR') this.currentShift.qrSales += this.finalPayable;
-                    this.currentShift.totalSales += this.finalPayable;
-
-                    this.financials.grossSales += this.finalPayable;
-                    if (this.db) this.getTenantRef('financials/grossSales').set(this.financials.grossSales);
-
-                    this.showCheckout = false;
-                    this.cart = [];
-                    setTimeout(() => { window.print(); }, 300);
+                removeDiscount() {
+                    this.discount = { type: 'NONE', rate: 0, amount: 0, reason: '' };
+                    if (this.orderType === 'Dine-In' && this.currentTable) {
+                        const tbl = this.tables.find(t => t.name === this.currentTable);
+                        if (tbl) {
+                            tbl.discount = { type: 'NONE', rate: 0, amount: 0, reason: '' };
+                            tbl.currentBill = this.finalPayable;
+                            this.persistTables();
+                        }
+                    }
+                    this.triggerToast("Discount Removed");
                 },
+                printPreBill() {
+        if (this.cart.length === 0) return;
+        this.isPreBill = true;
+        this.lastInvoice = {
+            id: Math.floor(1000 + Math.random() * 9000),
+            date: new Date().toLocaleString(),
+            orderType: this.orderType,
+            table: this.currentTable,
+            customer: JSON.parse(JSON.stringify(this.customer)),
+            items: JSON.parse(JSON.stringify(this.cart)),
+            subtotal: this.cartSubtotal,
+            discountAmount: this.discountAmount,
+            discountReason: this.discount.reason,
+            service: this.serviceCharge,
+            packaging: this.packagingFee,
+            sscl: this.ssclAmount,
+            vat: this.vatAmount,
+            total: this.finalPayable
+        };
+        setTimeout(() => { window.print(); }, 200);
+    },
+    openCheckoutModal() {
+        this.payTab = 'SINGLE';
+        this.cashTendered = this.finalPayable;
+        this.splitPay = { cash: Math.round(this.finalPayable / 2), card: Math.round(this.finalPayable / 2), qr: 0 };
+        this.showCheckout = true;
+        this.$nextTick(() => {
+            const qr = document.getElementById("qrcode-box");
+            if (qr) {
+                qr.innerHTML = "";
+                new QRCode(qr, { text: `LANKAQR|RESTRO|AMOUNT:${this.finalPayable}|CUR:LKR`, width: 110, height: 110 });
+            }
+        });
+    },
+    completePayment(mode) {
+        this.finalizeOrderSettlement({
+            mode: mode,
+            cashPaid: mode === 'CASH' ? this.finalPayable : 0,
+            cardPaid: mode === 'CARD' ? this.finalPayable : 0,
+            qrPaid: mode === 'LANKAQR' ? this.finalPayable : 0,
+            tendered: mode === 'CASH' ? (this.cashTendered || this.finalPayable) : this.finalPayable,
+            change: mode === 'CASH' ? this.cashChangeDue : 0
+        });
+    },
+    completeSplitPayment() {
+        if (this.totalSplitPaid < this.finalPayable) {
+            alert(`තව රු. ${this.formatNumber(this.splitRemaining)} ක් ගෙවිය යුතුය.`);
+            return;
+        }
+        this.finalizeOrderSettlement({
+            mode: 'SPLIT',
+            cashPaid: Number(this.splitPay.cash || 0) - this.cashChangeDue,
+            cardPaid: Number(this.splitPay.card || 0),
+            qrPaid: Number(this.splitPay.qr || 0),
+            tendered: Number(this.splitPay.cash || 0),
+            change: this.cashChangeDue
+        });
+    },
+    finalizeOrderSettlement(payDetails) {
+    this.isPreBill = false;
+    this.saveOrUpdateCustomerProfile();
+    
+    this.lastInvoice = {
+        id: Math.floor(1000 + Math.random() * 9000),
+        date: new Date().toLocaleString(),
+        orderType: this.orderType,
+        table: this.currentTable,
+        customer: JSON.parse(JSON.stringify(this.customer)),
+        items: JSON.parse(JSON.stringify(this.cart)),
+        subtotal: this.cartSubtotal,
+        discountAmount: this.discountAmount,
+        discountReason: this.discount.reason,
+        service: this.serviceCharge,
+        packaging: this.packagingFee,
+        sscl: this.ssclAmount,
+        vat: this.vatAmount,
+        total: this.finalPayable,
+        payMode: payDetails.mode,
+        cashPaid: payDetails.cashPaid,
+        cardPaid: payDetails.cardPaid,
+        qrPaid: payDetails.qrPaid,
+        tendered: payDetails.tendered,
+        change: payDetails.change
+    };
+    
+    this.currentShift.cashSales += Math.max(0, payDetails.cashPaid);
+    this.currentShift.cardSales += Math.max(0, payDetails.cardPaid);
+    this.currentShift.qrSales += Math.max(0, payDetails.qrPaid);
+    this.currentShift.totalSales += this.finalPayable;
+    this.financials.grossSales += this.finalPayable;
+    
+    // Sync Financials & Shift to Cloud immediately
+    if (this.db) {
+        try {
+            this.getTenantRef('financials/grossSales').set(this.financials.grossSales);
+            this.getTenantRef('currentShift').set(this.currentShift);
+        } catch (e) {}
+    }
+    this.saveLocalBackup();
+    
+    if (this.orderType === 'Dine-In' && this.currentTable) {
+        const tbl = this.tables.find(t => t.name === this.currentTable);
+        if (tbl) {
+            tbl.status = 'Available';
+            tbl.activeCart = [];
+            tbl.discount = { type: 'NONE', rate: 0, amount: 0, reason: '' };
+            tbl.currentBill = 0;
+            tbl.openedTime = null;
+            this.persistTables();
+        }
+        this.currentTable = '';
+    }
+    
+    this.showCheckout = false;
+    this.cart = [];
+    this.discount = { type: 'NONE', rate: 0, amount: 0, reason: '' };
+    this.clearCustomer();
+    this.saveLocalBackup();
+    this.triggerToast("✓ Bill Settled Successfully!");
+    setTimeout(() => { window.print(); }, 300);
+},
                 restockItem(ing) {
                     ing.stock += 10;
                     if (this.db) this.getTenantRef('ingredients').set(this.ingredients);
                 },
-                openShiftModal() { this.actualCashInput = null; this.showShiftModal = true; },
-                finalizeShiftClose() {
-                    alert(`Shift #${this.currentShift.id} closed. Z-Report printed.`);
-                    this.currentShift = { id: this.currentShift.id + 1, startTime: new Date().toLocaleTimeString(), cashSales: 0, cardSales: 0, qrSales: 0, totalSales: 0 };
-                    this.showShiftModal = false;
+                openShiftModal() {
+                    this.denominations = { 5000: 0, 1000: 0, 500: 0, 100: 0, 50: 0, 20: 0, coins: 0 };
+                    this.showShiftModal = true;
                 },
-                // Dishes & Category CRUD
+                finalizeShiftClose() {
+                    const shiftId = (this.currentShift && this.currentShift.id) ? this.currentShift.id : 101;
+                    const cashierName = (this.currentUser && this.currentUser.name) ? this.currentUser.name : 'Staff';
+                    const expectedCash = (this.currentShift && this.currentShift.cashSales) ? this.currentShift.cashSales : 0;
+                    const cardSales = (this.currentShift && this.currentShift.cardSales) ? this.currentShift.cardSales : 0;
+                    const qrSales = (this.currentShift && this.currentShift.qrSales) ? this.currentShift.qrSales : 0;
+                    const totalSales = (this.currentShift && this.currentShift.totalSales) ? this.currentShift.totalSales : 0;
+                    const currentVariance = this.cashVariance;
+                    
+                    const shiftReport = {
+                        shiftId: shiftId,
+                        cashier: cashierName,
+                        closeTime: new Date().toLocaleString(),
+                        expectedCash: expectedCash,
+                        actualCash: this.countedDrawerCash,
+                        variance: currentVariance,
+                        cardSales: cardSales,
+                        qrSales: qrSales,
+                        totalGross: totalSales,
+                        denominations: this.denominations ? JSON.parse(JSON.stringify(this.denominations)) : {}
+                    };
+                    
+                    if (this.db) {
+                        try { this.getTenantRef(`z_reports/shift_${shiftId}`).set(shiftReport); } catch (e) {}
+                    }
+                    
+                    this.showShiftModal = false;
+                    this.currentShift = {
+                        id: Number(shiftId) + 1,
+                        startTime: new Date().toLocaleTimeString(),
+                        cashSales: 0,
+                        cardSales: 0,
+                        qrSales: 0,
+                        totalSales: 0
+                    };
+                    this.triggerToast(`✓ Shift #${shiftId} Closed! Variance: Rs. ${this.formatNumber(currentVariance)}`);
+                },
                 openDishModal(dish) {
-                    if (dish) this.dishForm = { ...dish };
-                    else this.dishForm = { id: null, name: '', category: this.categories[0] || 'Main Dishes', price: 0, portion: 'Regular' };
+                    if (dish) {
+                        this.dishForm = {
+                            id: dish.id,
+                            name: dish.name,
+                            category: dish.category || this.categories[0],
+                            station: dish.station || this.kitchenStations[0],
+                            price: dish.price,
+                            portion: dish.portion || 'Regular',
+                            recipe: dish.recipe || []
+                        };
+                    } else {
+                        this.dishForm = {
+                            id: null,
+                            name: '',
+                            category: this.categories[0] || 'Main Dishes',
+                            station: this.kitchenStations[0] || 'Main Kitchen',
+                            price: 0,
+                            portion: 'Regular',
+                            recipe: []
+                        };
+                    }
                     this.showDishModal = true;
                 },
                 saveDish() {
@@ -1111,12 +2331,158 @@
                 deleteCategory(idx) {
                     this.categories.splice(idx, 1);
                     if (this.db) this.getTenantRef('categories').set(this.categories);
+                },
+                openTransferModal() {
+                    if (this.occupiedTables.length === 0) {
+                        this.triggerToast("මාරු කිරීමට Occupied මේස කිසිවක් නැත!");
+                        return;
+                    }
+                    this.transferForm = {
+                        fromTable: this.occupiedTables[0]?.name || '',
+                        toTable: this.availableTables[0]?.name || ''
+                    };
+                    this.showTransferModal = true;
+                },
+                executeTableTransfer() {
+                    const from = this.tables.find(t => t.name === this.transferForm.fromTable);
+                    const to = this.tables.find(t => t.name === this.transferForm.toTable);
+                    if (!from || !to) { this.triggerToast("කරුණාකර මේස දෙකම තෝරන්න!"); return; }
+                    
+                    to.status = 'Occupied';
+                    to.activeCart = JSON.parse(JSON.stringify(from.activeCart || []));
+                    to.currentBill = from.currentBill || 0;
+                    to.openedTime = from.openedTime || new Date().toLocaleTimeString();
+                    
+                    from.status = 'Available';
+                    from.activeCart = [];
+                    from.currentBill = 0;
+                    from.openedTime = null;
+                    
+                    if (this.currentTable === from.name) this.currentTable = to.name;
+                    this.persistTables();
+                    this.showTransferModal = false;
+                    this.triggerToast(`✓ Table ${from.name} shifted to ${to.name}!`);
+                },
+                openFloorModal() { this.newFloorInput = ''; this.showFloorModal = true; },
+                persistFloors() {
+                    const cleanFloors = JSON.parse(JSON.stringify(this.floors));
+                    if (this.db) this.getTenantRef('floors').set(cleanFloors);
+                },
+                addNewFloor() {
+                    const val = this.newFloorInput ? this.newFloorInput.trim() : '';
+                    if (!val) return;
+                    if (this.floors.map(f => f.toLowerCase()).includes(val.toLowerCase())) { alert("Area already exists!"); return; }
+                    this.floors.push(val);
+                    this.persistFloors();
+                    this.newFloorInput = '';
+                    this.triggerToast(`Area "${val}" Added!`);
+                },
+                deleteFloor(idx, floorName) {
+                    if (this.tables.some(t => t.floor === floorName)) { alert("Cannot delete Area with existing tables!"); return; }
+                    if (this.floors.length <= 1) { alert("Minimum 1 Area required!"); return; }
+                    if (confirm(`Delete Area "${floorName}"?`)) {
+                        this.floors.splice(idx, 1);
+                        if (this.selectedFloor === floorName) this.selectedFloor = 'All';
+                        this.persistFloors();
+                        this.triggerToast("Area Deleted!");
+                    }
+                },
+                getFloorTableCount(floorName) {
+                    return this.tables.filter(t => t && t.floor === floorName).length;
+                },
+                triggerToast(msg) {
+                    this.toast.message = msg;
+                    this.toast.show = true;
+                    setTimeout(() => { this.toast.show = false; }, 2500);
+                },
+                openTableModal(table) {
+                    if (table) {
+                        this.tableForm = { id: table.id, name: String(table.name), floor: table.floor || this.floors[0], capacity: Number(table.capacity) || 4 };
+                    } else {
+                        const nextNum = this.tables.length + 1;
+                        this.tableForm = { id: null, name: `T-${nextNum < 10 ? '0' + nextNum : nextNum}`, floor: this.floors[0], capacity: 4 };
+                    }
+                    this.showTableModal = true;
+                },
+                persistTables() {
+    try {
+        const cleanArray = this.tables.map(t => ({
+            id: t.id,
+            name: String(t.name),
+            floor: t.floor || 'Main AC Dining',
+            capacity: Number(t.capacity) || 4,
+            status: t.status || 'Available',
+            activeCart: t.activeCart || [],
+            openedTime: t.openedTime || null,
+            currentBill: Number(t.currentBill) || 0,
+            discount: t.discount || { type: 'NONE', rate: 0, amount: 0, reason: '' }
+        }));
+        if (this.db) this.getTenantRef('tables').set(cleanArray);
+        this.saveLocalBackup();
+    } catch (e) { console.warn(e); }
+},
+                saveTable() {
+                    const rawName = this.tableForm.name ? this.tableForm.name.trim() : '';
+                    if (!rawName) { alert("Please enter Table Name!"); return; }
+                    const isEdit = this.tableForm.id !== null && this.tableForm.id !== undefined;
+                    const selectedFloor = this.tableForm.floor || this.floors[0];
+                    const selectedCapacity = Number(this.tableForm.capacity) || 4;
+                    
+                    if (isEdit) {
+                        const idx = this.tables.findIndex(t => String(t.id) === String(this.tableForm.id));
+                        if (idx !== -1) {
+                            this.tables[idx].name = rawName;
+                            this.tables[idx].floor = selectedFloor;
+                            this.tables[idx].capacity = selectedCapacity;
+                        }
+                    } else {
+                        this.tables.push({
+                            id: Date.now(),
+                            name: rawName,
+                            floor: selectedFloor,
+                            capacity: selectedCapacity,
+                            status: 'Available',
+                            activeCart: [],
+                            openedTime: null,
+                            currentBill: 0
+                        });
+                    }
+                    this.persistTables();
+                    this.showTableModal = false;
+                    this.triggerToast(isEdit ? "Table Updated!" : "Table Saved!");
+                },
+                deleteTable(tableId) {
+                    const tbl = this.tables.find(t => String(t.id) === String(tableId));
+                    if (!tbl) return;
+                    if (tbl.status === 'Occupied') { alert("Cannot delete occupied table! Settle bill first."); return; }
+                    if (confirm(`Delete table "${tbl.name}"?`)) {
+                        this.tables = this.tables.filter(t => String(t.id) !== String(tableId));
+                        this.persistTables();
+                        this.triggerToast("Table Deleted!");
+                    }
                 }
             },
-            mounted() {
-                this.initFirebase();
-            }
+            watch: {
+        tables: { deep: true, handler() { this.saveLocalBackup(); } },
+        liveKdsOrders: { deep: true, handler() { this.saveLocalBackup(); } },
+        ingredients: { deep: true, handler() { this.saveLocalBackup(); } },
+        voidLogs: { deep: true, handler() { this.saveLocalBackup(); } },
+        currentShift: { deep: true, handler() { this.saveLocalBackup(); } },
+        financials: { deep: true, handler() { this.saveLocalBackup(); } },
+        customers: { deep: true, handler() { this.saveLocalBackup(); } },
+        products: { deep: true, handler() { this.saveLocalBackup(); } },
+        categories: { deep: true, handler() { this.saveLocalBackup(); } },
+        floors: { deep: true, handler() { this.saveLocalBackup(); } },
+        promotions: { deep: true, handler() { this.saveLocalBackup(); } },
+        config: { deep: true, handler() { this.saveLocalBackup(); } },
+        cart: { deep: true, handler() { this.saveLocalBackup(); } }
+    },
+    mounted() {
+        this.loadLocalBackup();
+        this.initFirebase();
+    }
         }).mount('#app');
     </script>
 </body>
 </html>
+
