@@ -32,23 +32,38 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         * { font-family: 'Plus Jakarta Sans', sans-serif; }
         
+     @page {
+            margin: 0 !important;
+            size: auto;
+        }
         @media print {
+            body {
+                background: #fff !important;
+                color: #000 !important;
+            }
             body * { visibility: hidden; }
             #thermal-receipt, #thermal-receipt *,
             #thermal-kot-receipt, #thermal-kot-receipt * { 
                 visibility: visible !important; 
-                display: block !important;
+                color: #000000 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
             #thermal-receipt, #thermal-kot-receipt {
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: 78mm;
-                font-family: 'Courier New', Courier, monospace;
-                color: black !important;
-                background: white !important;
-                padding: 2px;
+                width: 76mm !important;
+                margin: 0 !important;
+                padding: 4px !important;
+                font-family: 'Courier New', Courier, monospace !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-weight: 700 !important;
                 display: block !important;
+            }
+            table, tr, td, th {
+                color: #000000 !important;
             }
         }
         .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -1604,98 +1619,109 @@
     </div>
 </div>
 
-<!-- 13. THERMAL RECEIPT PRINT TEMPLATE -->
+<!-- 13. ULTRA-CRISP HIGH-CONTRAST THERMAL RECEIPT -->
 <div id="thermal-receipt" class="hidden">
-            <div style="text-align: center; border-bottom: 1px dashed black; padding-bottom: 5px;">
-                <h2 style="font-size: 16px; font-weight: bold; margin: 0;">{{ config.general.restaurantName }}</h2>
-                <p style="font-size: 10px; margin: 2px 0;">No 45, Duplication Road, Colombo 03</p>
-                <p style="font-size: 10px; margin: 2px 0;">Tel: +94 11 250 8899 | VAT: 409128391</p>
-                <div style="font-weight: bold; font-size: 11px; margin-top: 3px; border: 1px solid black; padding: 2px;">
-                    {{ isPreBill ? '*** TABLE PRE-BILL / ESTIMATE ***' : '*** FINAL TAX INVOICE ***' }}
-                </div>
-            </div>
-            <div style="font-size: 10px; padding: 4px 0; border-bottom: 1px dashed black;">
-    <div>Bill No: #INV-{{ lastInvoice.id }}</div>
-    <div>Date: {{ lastInvoice.date }}</div>
-    <div>Staff: {{ currentUser.name }} | Mode: {{ lastInvoice.orderType || orderType }}</div>
-    <div v-if="lastInvoice.orderType === 'Dine-In'">Table: {{ lastInvoice.table || currentTable || 'Table Quick' }}</div>
-    
-    <!-- CUSTOMER & DELIVERY DISPATCH INFO -->
-    <div v-if="lastInvoice.customer && lastInvoice.customer.phone" style="margin-top: 3px; padding-top: 3px; border-top: 1px dotted black;">
-        <div><strong>Customer:</strong> {{ lastInvoice.customer.name || 'Valued Guest' }} ({{ lastInvoice.customer.phone }})</div>
-        <div v-if="lastInvoice.customer.landmark"><strong>Area/Landmark:</strong> {{ lastInvoice.customer.landmark }}</div>
-        <div v-if="lastInvoice.customer.address" style="font-weight: bold; background: #eee; padding: 2px; margin-top: 2px;">
-            Delivery to: {{ lastInvoice.customer.address }}
+    <div style="text-align: center; border-bottom: 2px dashed #000; padding-bottom: 6px;">
+        <h2 style="font-size: 18px; font-weight: 900; margin: 0; text-transform: uppercase; color: #000;">{{ config.general.restaurantName }}</h2>
+        <p style="font-size: 11px; margin: 2px 0; font-weight: bold; color: #000;">No 45, Duplication Road, Colombo 03</p>
+        <p style="font-size: 11px; margin: 2px 0; font-weight: bold; color: #000;">Tel: +94 11 250 8899 | VAT: 409128391</p>
+        <div style="font-weight: 900; font-size: 13px; margin-top: 5px; border: 2px solid #000; padding: 3px; text-transform: uppercase;">
+            {{ isPreBill ? '*** TABLE ESTIMATE / PRE-BILL ***' : '*** FINAL TAX INVOICE ***' }}
         </div>
     </div>
-</div>
-            <table style="width: 100%; font-size: 10px; border-collapse: collapse; margin: 5px 0;">
-                <thead>
-                    <tr style="border-bottom: 1px solid black; text-align: left;">
-                        <th>Item</th>
-                        <th style="text-align: center;">Qty</th>
-                        <th style="text-align: right;">Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="it in lastInvoice.items" :key="it.name">
-                        <td>
-                            {{ it.name }}
-                            <div v-if="it.note" style="font-size: 8px; font-style: italic;">* {{ it.note }}</div>
-                        </td>
-                        <td style="text-align: center;">{{ it.qty }}</td>
-                        <td style="text-align: right;">{{ formatNumber(it.price * it.qty) }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div style="border-top: 1px dashed black; padding-top: 4px; font-size: 10px;">
-                <div style="display: flex; justify-content: space-between;">
-                    <span>Subtotal:</span><span>Rs. {{ formatNumber(lastInvoice.subtotal) }}</span>
-                </div>
-                <div v-if="lastInvoice.discountAmount > 0" style="display: flex; justify-content: space-between; font-weight: bold;">
-                    <span>Discount ({{ lastInvoice.discountReason }}):</span><span>- Rs. {{ formatNumber(lastInvoice.discountAmount) }}</span>
-                </div>
-                <div v-if="lastInvoice.service > 0" style="display: flex; justify-content: space-between;">
-                    <span>Service Charge ({{ config.charges.serviceChargePercent }}%):</span><span>Rs. {{ formatNumber(lastInvoice.service) }}</span>
-                </div>
-                <div v-if="lastInvoice.packaging > 0" style="display: flex; justify-content: space-between;">
-                    <span>Packaging Fee:</span><span>Rs. {{ formatNumber(lastInvoice.packaging) }}</span>
-                </div>
-                <div v-if="lastInvoice.sscl > 0" style="display: flex; justify-content: space-between;">
-                    <span>SSCL Tax ({{ config.charges.ssclPercent }}%):</span><span>Rs. {{ formatNumber(lastInvoice.sscl) }}</span>
-                </div>
-                <div v-if="lastInvoice.vat > 0" style="display: flex; justify-content: space-between;">
-                    <span>Govt VAT ({{ config.charges.vatPercent }}%):</span><span>Rs. {{ formatNumber(lastInvoice.vat) }}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 12px; margin-top: 4px; border-top: 1px solid black; padding-top: 2px;">
-                    <span>NET TOTAL:</span><span>Rs. {{ formatNumber(lastInvoice.total) }}</span>
-                </div>
-                
-                <div v-if="lastInvoice.payMode === 'SPLIT'" style="margin-top: 4px; padding-top: 3px; border-top: 1px dashed black; font-size: 9px;">
-                    <div style="font-weight: bold; margin-bottom: 2px;">PAYMENT BREAKDOWN:</div>
-                    <div v-if="lastInvoice.cashPaid > 0" style="display: flex; justify-content: space-between;">
-                        <span>Cash Paid:</span><span>Rs. {{ formatNumber(lastInvoice.cashPaid) }}</span>
-                    </div>
-                    <div v-if="lastInvoice.cardPaid > 0" style="display: flex; justify-content: space-between;">
-                        <span>Card Paid:</span><span>Rs. {{ formatNumber(lastInvoice.cardPaid) }}</span>
-                    </div>
-                    <div v-if="lastInvoice.qrPaid > 0" style="display: flex; justify-content: space-between;">
-                        <span>LankaQR Paid:</span><span>Rs. {{ formatNumber(lastInvoice.qrPaid) }}</span>
-                    </div>
-                    <div v-if="lastInvoice.change > 0" style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 2px;">
-                        <span>Change Given:</span><span>Rs. {{ formatNumber(lastInvoice.change) }}</span>
-                    </div>
-                </div>
-                <div v-else-if="lastInvoice.change > 0" style="display: flex; justify-content: space-between; font-size: 9px; margin-top: 3px; border-top: 1px dashed black; padding-top: 2px;">
-                    <span>Change Returned:</span><span>Rs. {{ formatNumber(lastInvoice.change) }}</span>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 10px; font-size: 10px;">
-                <p v-if="isPreBill" style="font-weight: bold;">(මෙය ගෙවීම් බිල්පතක් නොවේ - ESTIMATE ONLY)</p>
-                <p v-else>ස්තූතියි! නැවත පැමිණෙන්න.</p>
-                <p style="font-size: 8px;">Software by APEXRESTRO ENTERPRISE</p>
+    
+    <div style="font-size: 11px; padding: 6px 0; border-bottom: 2px dashed #000; font-weight: bold; line-height: 1.4;">
+        <div style="display: flex; justify-content: space-between;">
+            <span>Bill No: #INV-{{ lastInvoice.id }}</span>
+            <span>Mode: {{ lastInvoice.orderType || orderType }}</span>
+        </div>
+        <div>Date: {{ lastInvoice.date }}</div>
+        <div style="display: flex; justify-content: space-between;">
+            <span>Staff: {{ currentUser.name }}</span>
+            <span v-if="lastInvoice.orderType === 'Dine-In'" style="font-size: 13px; font-weight: 900;">TABLE: {{ lastInvoice.table || currentTable || 'Quick' }}</span>
+        </div>
+        
+        <!-- CUSTOMER INFO -->
+        <div v-if="lastInvoice.customer && lastInvoice.customer.phone" style="margin-top: 4px; padding-top: 3px; border-top: 1px dotted #000;">
+            <div>Cust: {{ lastInvoice.customer.name || 'Valued Guest' }} ({{ lastInvoice.customer.phone }})</div>
+            <div v-if="lastInvoice.customer.landmark">Landmark: {{ lastInvoice.customer.landmark }}</div>
+            <div v-if="lastInvoice.customer.address" style="font-weight: 900; border: 1px solid #000; padding: 2px; margin-top: 2px;">
+                Delivery: {{ lastInvoice.customer.address }}
             </div>
         </div>
+    </div>
+    
+    <!-- ITEMS TABLE -->
+    <table style="width: 100%; font-size: 12px; border-collapse: collapse; margin: 6px 0; font-weight: bold;">
+        <thead>
+            <tr style="border-bottom: 2px solid #000; text-align: left;">
+                <th style="padding: 3px 0;">ITEM</th>
+                <th style="text-align: center; padding: 3px 0;">QTY</th>
+                <th style="text-align: right; padding: 3px 0;">PRICE</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="it in lastInvoice.items" :key="it.name" style="border-bottom: 1px dotted #888;">
+                <td style="padding: 4px 0;">
+                    <div style="font-size: 12px; font-weight: 900;">{{ it.name }}</div>
+                    <div v-if="it.note" style="font-size: 10px; font-style: italic;">* {{ it.note }}</div>
+                </td>
+                <td style="text-align: center; font-size: 13px; font-weight: 900; vertical-align: top; padding: 4px 0;">{{ it.qty }}</td>
+                <td style="text-align: right; font-size: 12px; font-weight: 900; vertical-align: top; padding: 4px 0;">{{ formatNumber(it.price * it.qty) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- TOTALS -->
+    <div style="border-top: 2px dashed #000; padding-top: 5px; font-size: 11px; font-weight: bold; line-height: 1.5;">
+        <div style="display: flex; justify-content: space-between;">
+            <span>Sub Total:</span><span>Rs. {{ formatNumber(lastInvoice.subtotal) }}</span>
+        </div>
+        <div v-if="lastInvoice.discountAmount > 0" style="display: flex; justify-content: space-between;">
+            <span>Discount ({{ lastInvoice.discountReason }}):</span><span>- Rs. {{ formatNumber(lastInvoice.discountAmount) }}</span>
+        </div>
+        <div v-if="lastInvoice.service > 0" style="display: flex; justify-content: space-between;">
+            <span>Service Charge ({{ config.charges.serviceChargePercent }}%):</span><span>Rs. {{ formatNumber(lastInvoice.service) }}</span>
+        </div>
+        <div v-if="lastInvoice.packaging > 0" style="display: flex; justify-content: space-between;">
+            <span>Packaging Fee:</span><span>Rs. {{ formatNumber(lastInvoice.packaging) }}</span>
+        </div>
+        <div v-if="lastInvoice.sscl > 0" style="display: flex; justify-content: space-between;">
+            <span>SSCL Tax ({{ config.charges.ssclPercent }}%):</span><span>Rs. {{ formatNumber(lastInvoice.sscl) }}</span>
+        </div>
+        <div v-if="lastInvoice.vat > 0" style="display: flex; justify-content: space-between;">
+            <span>Govt VAT ({{ config.charges.vatPercent }}%):</span><span>Rs. {{ formatNumber(lastInvoice.vat) }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 16px; margin-top: 5px; border-top: 2px solid #000; border-bottom: 2px solid #000; padding: 4px 0;">
+            <span>NET TOTAL:</span><span>Rs. {{ formatNumber(lastInvoice.total) }}</span>
+        </div>
+        
+        <div v-if="lastInvoice.payMode === 'SPLIT'" style="margin-top: 4px; padding-top: 3px; font-size: 11px;">
+            <div style="font-weight: 900;">PAYMENT BREAKDOWN:</div>
+            <div v-if="lastInvoice.cashPaid > 0" style="display: flex; justify-content: space-between;">
+                <span>Cash Paid:</span><span>Rs. {{ formatNumber(lastInvoice.cashPaid) }}</span>
+            </div>
+            <div v-if="lastInvoice.cardPaid > 0" style="display: flex; justify-content: space-between;">
+                <span>Card Paid:</span><span>Rs. {{ formatNumber(lastInvoice.cardPaid) }}</span>
+            </div>
+            <div v-if="lastInvoice.qrPaid > 0" style="display: flex; justify-content: space-between;">
+                <span>LankaQR Paid:</span><span>Rs. {{ formatNumber(lastInvoice.qrPaid) }}</span>
+            </div>
+            <div v-if="lastInvoice.change > 0" style="display: flex; justify-content: space-between; font-weight: 900;">
+                <span>Change Given:</span><span>Rs. {{ formatNumber(lastInvoice.change) }}</span>
+            </div>
+        </div>
+        <div v-else-if="lastInvoice.change > 0" style="display: flex; justify-content: space-between; font-size: 11px; margin-top: 3px;">
+            <span>Change Returned:</span><span>Rs. {{ formatNumber(lastInvoice.change) }}</span>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 8px; font-size: 11px; font-weight: bold; border-top: 1px dashed #000; padding-top: 5px;">
+        <p v-if="isPreBill" style="font-size: 12px; font-weight: 900;">(මෙය ගෙවීම් බිල්පතක් නොවේ - ESTIMATE ONLY)</p>
+        <p v-else style="margin: 2px 0;">ස්තූතියි! නැවත පැමිණෙන්න.</p>
+        <p style="font-size: 9px; margin: 0;">{{ config.printing.customHeader || 'Software by ApexRestro' }}</p>
+    </div>
+</div>
 
     </div>
 
