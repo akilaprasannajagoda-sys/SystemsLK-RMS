@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +31,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         * { font-family: 'Plus Jakarta Sans', sans-serif; }
         
-     @page {
+        @page {
             margin: 0 !important;
             size: auto;
         }
@@ -174,12 +173,12 @@
                         <div class="text-xs sm:text-sm font-black text-emerald-400">Rs. {{ formatNumber(financials.grossSales) }}</div>
                     </div>
                     <!-- PETTY CASH IN/OUT & Z-REPORT BUTTONS -->
-<button @click="openPettyCashModal" class="bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-dark-950 border border-amber-500/30 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-sm">
-    <i class="fa-solid fa-money-bill-transfer"></i> <span class="hidden sm:inline">Cash In/Out</span>
-</button>
-<button @click="openShiftModal" class="bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/20 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-1.5">
-    <i class="fa-solid fa-receipt"></i> <span class="hidden sm:inline">Close Shift</span> (Z-Report)
-</button>
+                    <button @click="openPettyCashModal" class="bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-dark-950 border border-amber-500/30 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-money-bill-transfer"></i> <span class="hidden sm:inline">Cash In/Out</span>
+                    </button>
+                    <button @click="openShiftModal" class="bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/20 px-3 py-1.5 rounded-xl text-[11px] font-bold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-receipt"></i> <span class="hidden sm:inline">Close Shift</span> (Z-Report)
+                    </button>
                 </div>
             </header>
 
@@ -287,7 +286,7 @@
                             </div>
                         </div>
 
-                      <!-- Universal Order Type & CRM Selector (Desktop & Mobile Visible) -->
+                        <!-- Universal Order Type & CRM Selector (Desktop & Mobile Visible) -->
                         <div class="p-3 border-b border-slate-800 bg-slate-950/60 space-y-2.5">
                             <div class="flex gap-2">
                                 <button v-for="type in activeOrderTypes" :key="type" @click="setOrderType(type)"
@@ -724,32 +723,131 @@
                     </div>
                 </div>
 
-                <!-- ================= TAB 7: FINANCE & COGS ================= -->
-                <div v-if="activeTab === 'finance'" class="flex-1 overflow-y-auto custom-scroll space-y-4">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl">
-                            <span class="text-[10px] text-slate-400 uppercase font-semibold">Total Revenue (Gross)</span>
-                            <h3 class="text-lg sm:text-2xl font-black text-emerald-400 mt-1">Rs. {{ formatNumber(financials.grossSales) }}</h3>
-                            <span class="text-[9px] text-emerald-500">Cloud Synced</span>
-                        </div>
-                        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl">
-                            <span class="text-[10px] text-slate-400 uppercase font-semibold">Cost of Goods (COGS)</span>
-                            <h3 class="text-lg sm:text-2xl font-black text-rose-400 mt-1">Rs. {{ formatNumber(financials.cogs) }}</h3>
-                            <span class="text-[9px] text-slate-400">Consumption</span>
-                        </div>
-                        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl">
-                            <span class="text-[10px] text-slate-400 uppercase font-semibold">Profit Margin</span>
-                            <h3 class="text-lg sm:text-2xl font-black text-cyan-400 mt-1">{{ calculateMargin }}%</h3>
-                            <span class="text-[9px] text-cyan-500">Healthy Margin</span>
-                        </div>
-                        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl">
-                            <span class="text-[10px] text-slate-400 uppercase font-semibold">Net Operating Profit</span>
-                            <h3 class="text-lg sm:text-2xl font-black text-amber-400 mt-1">Rs. {{ formatNumber(financials.grossSales - financials.cogs - financials.overhead) }}</h3>
-                            <span class="text-[9px] text-slate-400">After Overheads</span>
-                        </div>
+              <!-- ================= TAB 7: FINANCE & ADVANCED ANALYTICS ================= -->
+<div v-if="activeTab === 'finance'" class="flex-1 overflow-y-auto custom-scroll space-y-4">
+    
+    <!-- KPI SUMMARY CARDS -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl shadow-md">
+            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Gross Sales (මුළු ආදායම)</span>
+            <h3 class="text-lg sm:text-2xl font-black text-emerald-400 mt-1">Rs. {{ formatNumber(financials.grossSales) }}</h3>
+            <span class="text-[10px] text-emerald-500 font-semibold"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> Live Synced</span>
+        </div>
+        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl shadow-md">
+            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Shift Net Sales</span>
+            <h3 class="text-lg sm:text-2xl font-black text-cyan-400 mt-1">Rs. {{ formatNumber(currentShift.totalSales || 0) }}</h3>
+            <span class="text-[10px] text-cyan-500 font-semibold">Shift #{{ currentShift.id }}</span>
+        </div>
+        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl shadow-md">
+            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Total Shift Expenses (වියදම්)</span>
+            <h3 class="text-lg sm:text-2xl font-black text-rose-400 mt-1">Rs. {{ formatNumber(currentShift.cashOut || 0) }}</h3>
+            <span class="text-[10px] text-rose-400/80 font-semibold">{{ pettyCashLogs.length }} Petty Cash Entries</span>
+        </div>
+        <div class="bg-dark-900 border border-slate-800 p-3.5 rounded-2xl shadow-md">
+            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Net Cash in Drawer</span>
+            <h3 class="text-lg sm:text-2xl font-black text-amber-400 mt-1">Rs. {{ formatNumber(expectedDrawerCash) }}</h3>
+            <span class="text-[10px] text-amber-500 font-semibold">Audited Realtime</span>
+        </div>
+    </div>
+    
+    <!-- ANALYTICS GRID (PAYMENTS & BEST SELLERS) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        
+        <!-- 1. Payment Methods Breakdown -->
+        <div class="bg-dark-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
+                <h4 class="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-credit-card text-cyan-400"></i> Payment Modes (ගෙවීම් ක්‍රම)
+                </h4>
+                <span class="text-[10px] text-slate-400 font-mono">Shift #{{ currentShift.id }}</span>
+            </div>
+            <div class="space-y-2 text-xs">
+                <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 flex justify-between items-center">
+                    <span class="font-bold text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-money-bill text-emerald-400"></i> Cash Payments</span>
+                    <span class="font-black text-emerald-400">Rs. {{ formatNumber(currentShift.cashSales || 0) }}</span>
+                </div>
+                <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 flex justify-between items-center">
+                    <span class="font-bold text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-credit-card text-blue-400"></i> Visa / Master Cards</span>
+                    <span class="font-black text-blue-400">Rs. {{ formatNumber(currentShift.cardSales || 0) }}</span>
+                </div>
+                <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 flex justify-between items-center">
+                    <span class="font-bold text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-qrcode text-amber-400"></i> LankaQR Quick Pay</span>
+                    <span class="font-black text-amber-400">Rs. {{ formatNumber(currentShift.qrSales || 0) }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 2. Recent Sales & Invoices Summary -->
+        <div class="bg-dark-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
+                <h4 class="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-emerald-400"></i> Recent Settled Invoices (බිල්පත්)
+                </h4>
+                <span class="text-[10px] text-slate-400 font-mono">{{ salesHistory.length }} Invoices</span>
+            </div>
+            <div class="max-h-48 overflow-y-auto custom-scroll space-y-1.5 pr-1 text-xs">
+                <div v-if="salesHistory.length === 0" class="p-4 text-center text-slate-500">
+                    මෙම Shift එක තුළ මෙතෙක් බිල්පත් ගෙවා නොමැත.
+                </div>
+                <div v-for="inv in salesHistory" :key="inv.id" class="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 flex justify-between items-center">
+                    <div>
+                        <span class="font-bold text-white block">#INV-{{ inv.id }} ({{ inv.orderType }})</span>
+                        <span class="text-[10px] text-slate-400 font-mono">{{ inv.date }} | Staff: {{ inv.staff }}</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="font-black text-emerald-400 block">Rs. {{ formatNumber(inv.total) }}</span>
+                        <span class="text-[9px] bg-slate-800 text-slate-300 px-1.5 py-0.2 rounded font-bold">{{ inv.payMode }}</span>
                     </div>
                 </div>
-
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- 3. PETTY CASH & EXPENSES AUDIT LOG -->
+    <div class="bg-dark-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
+            <h4 class="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-money-bill-transfer text-amber-400"></i> Daily Shift Expense & Float Audit (වියදම් විස්තරය)
+            </h4>
+            <span class="text-[10px] text-slate-400 font-mono">Shift Total Out: Rs. {{ formatNumber(currentShift.cashOut || 0) }}</span>
+        </div>
+        <div class="max-h-56 overflow-y-auto custom-scroll border border-slate-800 rounded-xl">
+            <table class="w-full text-left text-xs text-slate-300">
+                <thead class="bg-slate-950 border-b border-slate-800 text-slate-400 uppercase font-bold sticky top-0">
+                    <tr>
+                        <th class="p-2.5">Time</th>
+                        <th class="p-2.5">Type</th>
+                        <th class="p-2.5">Category</th>
+                        <th class="p-2.5">Reason / Description</th>
+                        <th class="p-2.5">Staff</th>
+                        <th class="p-2.5 text-right">Amount (LKR)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800">
+                    <tr v-if="pettyCashLogs.length === 0">
+                        <td colspan="6" class="p-4 text-center text-slate-500">දෛනික වියදම් හෝ Cash In සටහන් කර නොමැත.</td>
+                    </tr>
+                    <tr v-for="log in pettyCashLogs" :key="log.id" class="hover:bg-slate-800/40">
+                        <td class="p-2.5 font-mono text-slate-400">{{ log.time }}</td>
+                        <td class="p-2.5">
+                            <span :class="log.type === 'IN' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border-rose-500/30'" class="px-2 py-0.5 rounded-md text-[9px] font-black border">
+                                {{ log.type === 'IN' ? '+ CASH IN' : '- CASH OUT' }}
+                            </span>
+                        </td>
+                        <td class="p-2.5 font-bold text-white">{{ log.category }}</td>
+                        <td class="p-2.5 text-slate-300 italic">{{ log.reason }}</td>
+                        <td class="p-2.5 font-semibold text-amber-400">{{ log.authorizedBy }}</td>
+                        <td class="p-2.5 text-right font-black" :class="log.type === 'IN' ? 'text-emerald-400' : 'text-rose-400'">
+                            {{ log.type === 'IN' ? '+' : '-' }} Rs. {{ formatNumber(log.amount) }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</div>
                 <!-- ================= TAB 8: SETTINGS & MODULES ================= -->
                 <div v-if="activeTab === 'settings'" class="flex-1 overflow-y-auto custom-scroll space-y-4 bg-dark-900 border border-slate-800 rounded-2xl p-4 sm:p-6">
                     <div class="border-b border-slate-800 pb-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -1788,6 +1886,7 @@
                     pendingVoidItem: null,
                     voidForm: { reason: 'Customer Changed Mind', pin: '' },
                     voidLogs: [],
+    salesHistory: [],
     showPettyCashModal: false,
     pettyCashForm: { type: 'OUT', amount: 0, category: 'Supplies & Grocery', reason: '', pin: '' },
     pettyCashLogs: [],
@@ -2036,7 +2135,7 @@
             this.clearCustomer();
             this.saveLocalBackup();
             if (this.db) {
-                try { this.getTenantRef('parkedOrders').set(this.parkedOrders); } catch (e) {}
+                try { this.getTenantRef('parkedOrders').set(JSON.parse(JSON.stringify(this.parkedOrders))); } catch (e) {}
             }
             this.triggerToast("✓ Order Held / Parked Successfully!");
         },
@@ -2057,7 +2156,7 @@
             this.parkedOrders = this.parkedOrders.filter(o => o.id !== orderId);
             this.saveLocalBackup();
             if (this.db) {
-                try { this.getTenantRef('parkedOrders').set(this.parkedOrders); } catch (e) {}
+                try { this.getTenantRef('parkedOrders').set(JSON.parse(JSON.stringify(this.parkedOrders))); } catch (e) {}
             }
             if (notify) this.triggerToast("Parked order discarded.");
         },
@@ -2193,24 +2292,25 @@
     saveLocalBackup() {
         try {
             const state = {
-                tables: this.tables,
-                currentShift: this.currentShift,
-    pettyCashLogs: this.pettyCashLogs,
-    parkedOrders: this.parkedOrders,
-    financials: this.financials,
-                customers: this.customers,
-                promotions: this.promotions,
-                products: this.products,
-                categories: this.categories,
-                floors: this.floors,
-                ingredients: this.ingredients,
-                liveKdsOrders: this.liveKdsOrders,
-                voidLogs: this.voidLogs,
-                config: this.config,
-                cart: this.cart,
+                tables: JSON.parse(JSON.stringify(this.tables)),
+                currentShift: JSON.parse(JSON.stringify(this.currentShift)),
+      pettyCashLogs: JSON.parse(JSON.stringify(this.pettyCashLogs)),
+    salesHistory: JSON.parse(JSON.stringify(this.salesHistory)),
+    parkedOrders: JSON.parse(JSON.stringify(this.parkedOrders)),
+                financials: JSON.parse(JSON.stringify(this.financials)),
+                customers: JSON.parse(JSON.stringify(this.customers)),
+                promotions: JSON.parse(JSON.stringify(this.promotions)),
+                products: JSON.parse(JSON.stringify(this.products)),
+                categories: JSON.parse(JSON.stringify(this.categories)),
+                floors: JSON.parse(JSON.stringify(this.floors)),
+                ingredients: JSON.parse(JSON.stringify(this.ingredients)),
+                liveKdsOrders: JSON.parse(JSON.stringify(this.liveKdsOrders)),
+                voidLogs: JSON.parse(JSON.stringify(this.voidLogs)),
+                config: JSON.parse(JSON.stringify(this.config)),
+                cart: JSON.parse(JSON.stringify(this.cart)),
                 orderType: this.orderType,
                 currentTable: this.currentTable,
-                customer: this.customer
+                customer: JSON.parse(JSON.stringify(this.customer))
             };
             localStorage.setItem(`APEX_STATE_${this.restaurantId}`, JSON.stringify(state));
         } catch (e) { console.warn("Local storage error", e); }
@@ -2222,9 +2322,10 @@
                 const parsed = JSON.parse(saved);
                 if (parsed.tables && Array.isArray(parsed.tables)) this.tables = parsed.tables;
                 if (parsed.currentShift) this.currentShift = parsed.currentShift;
-if (parsed.pettyCashLogs && Array.isArray(parsed.pettyCashLogs)) this.pettyCashLogs = parsed.pettyCashLogs;
+                if (parsed.pettyCashLogs && Array.isArray(parsed.pettyCashLogs)) this.pettyCashLogs = parsed.pettyCashLogs;
+if (parsed.salesHistory && Array.isArray(parsed.salesHistory)) this.salesHistory = parsed.salesHistory;
 if (parsed.parkedOrders && Array.isArray(parsed.parkedOrders)) this.parkedOrders = parsed.parkedOrders;
-if (parsed.financials) this.financials = parsed.financials;
+                if (parsed.financials) this.financials = parsed.financials;
                 if (parsed.customers && Array.isArray(parsed.customers)) this.customers = parsed.customers;
                 if (parsed.promotions && Array.isArray(parsed.promotions)) this.promotions = parsed.promotions;
                 if (parsed.products && Array.isArray(parsed.products)) this.products = parsed.products;
@@ -2283,7 +2384,7 @@ if (parsed.financials) this.financials = parsed.financials;
                 },
                 initFirebase() {
                     try {
-                        if (!firebase.apps.length) {
+                        if (typeof firebase !== 'undefined' && !firebase.apps.length) {
                             firebase.initializeApp({
                                 databaseURL: "https://mypos-7266d-default-rtdb.firebaseio.com",
                                 projectId: "mypos-7266d"
@@ -2292,10 +2393,11 @@ if (parsed.financials) this.financials = parsed.financials;
                             this.setupFirebaseListeners();
                         }
                     } catch (e) {
-                        console.error("Firebase init error", e);
+                        console.warn("Firebase offline/bypassed:", e);
                     }
                 },
                 getTenantRef(path) {
+                    if (!this.db) return null;
                     return this.db.ref(`tenants/${this.restaurantId}/${path}`);
                 },
                 changeRestaurantId() {
@@ -2308,109 +2410,109 @@ if (parsed.financials) this.financials = parsed.financials;
                 },
                 setupFirebaseListeners() {
                     if (!this.db) return;
-
-                    // 1. Sync Realtime Products
-                    this.getTenantRef('products').on('value', snap => {
-                        const val = snap.val();
-                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
-                        if (list.length > 0) {
-                            this.products = list;
-                        } else {
-                            this.getTenantRef('products').set(this.products);
+                    try {
+                        // 1. Sync Realtime Products
+                        const prodRef = this.getTenantRef('products');
+                        if (prodRef) {
+                            prodRef.on('value', snap => {
+                                try {
+                                    const val = snap.val();
+                                    const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
+                                    if (list.length > 0) this.products = list;
+                                } catch (err) { console.warn(err); }
+                            });
                         }
-                    });
 
-                    // 2. Sync Categories
-                    this.getTenantRef('categories').on('value', snap => {
-                        const val = snap.val();
-                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
-                        if (list.length > 0) {
-                            this.categories = list;
-                        } else {
-                            this.getTenantRef('categories').set(this.categories);
+                        // 2. Sync Categories
+                        const catRef = this.getTenantRef('categories');
+                        if (catRef) {
+                            catRef.on('value', snap => {
+                                try {
+                                    const val = snap.val();
+                                    const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
+                                    if (list.length > 0) this.categories = list;
+                                } catch (err) { console.warn(err); }
+                            });
                         }
-                    });
 
-                    // 3. Sync Realtime Dining Floors
-                    this.getTenantRef('floors').on('value', snap => {
-                        const val = snap.val();
-                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
-                        if (list.length > 0) {
-                            this.floors = list;
-                        } else {
-                            this.persistFloors();
+                        // 3. Sync Floors
+                        const floorRef = this.getTenantRef('floors');
+                        if (floorRef) {
+                            floorRef.on('value', snap => {
+                                try {
+                                    const val = snap.val();
+                                    const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
+                                    if (list.length > 0) this.floors = list;
+                                } catch (err) { console.warn(err); }
+                            });
                         }
-                    });
 
-                    // 4. Sync Realtime Table Floor Plan
-                    this.getTenantRef('tables').on('value', snap => {
-                        const val = snap.val();
-                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(t => t && t.name) : [];
-                        if (list.length > 0) {
-                            this.tables = list;
-                        } else {
-                            this.persistTables();
+                        // 4. Sync Tables
+                        const tblRef = this.getTenantRef('tables');
+                        if (tblRef) {
+                            tblRef.on('value', snap => {
+                                try {
+                                    const val = snap.val();
+                                    const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(t => t && t.name) : [];
+                                    if (list.length > 0) this.tables = list;
+                                } catch (err) { console.warn(err); }
+                            });
                         }
-                    });
 
-                    // 5. Sync Live KDS Orders
-                    this.getTenantRef('kds_orders').on('value', snap => {
-                        const val = snap.val();
-                        if (val) this.liveKdsOrders = (Array.isArray(val) ? val : Object.values(val)).filter(Boolean);
-                        else this.liveKdsOrders = [];
-                    });
-
-                    // 6. Sync Ingredients
-                    this.getTenantRef('ingredients').on('value', snap => {
-                        const val = snap.val();
-                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
-                        if (list.length > 0) {
-                            this.ingredients = list;
-                        } else {
-                            this.getTenantRef('ingredients').set(this.ingredients);
+                        // 5. Sync KDS
+                        const kdsRef = this.getTenantRef('kds_orders');
+                        if (kdsRef) {
+                            kdsRef.on('value', snap => {
+                                try {
+                                    const val = snap.val();
+                                    this.liveKdsOrders = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
+                                } catch (err) { console.warn(err); }
+                            });
                         }
-                    });
 
-                    // 7. Sync Dynamic Restaurant Promotions
-                    this.getTenantRef('promotions').on('value', snap => {
-                        const val = snap.val();
-                        const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
-                        if (list.length > 0) {
-                            this.promotions = list;
-                        } else {
-                            this.persistPromotions();
+                        // 6. Sync Ingredients
+                        const ingRef = this.getTenantRef('ingredients');
+                        if (ingRef) {
+                            ingRef.on('value', snap => {
+                                try {
+                                    const val = snap.val();
+                                    const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
+                                    if (list.length > 0) this.ingredients = list;
+                                } catch (err) { console.warn(err); }
+                            });
                         }
-                    });
 
-                    // 8. Sync Void Logs
-                    this.getTenantRef('voidLogs').on('value', snap => {
-                        const val = snap.val();
-                        if (val) this.voidLogs = (Array.isArray(val) ? val : Object.values(val)).filter(Boolean);
-                    });
+                        // 7. Sync Shift
+                        const shiftRef = this.getTenantRef('currentShift');
+                        if (shiftRef) {
+                            shiftRef.on('value', snap => {
+                                try {
+                                    const val = snap.val();
+                                    if (val) this.currentShift = val;
+                                } catch (err) { console.warn(err); }
+                            });
+                        }
 
-                    // 9. Sync Financials
-                    this.getTenantRef('financials/grossSales').on('value', snap => {
-                        const val = snap.val();
-                        if (val !== null && val !== undefined) this.financials.grossSales = Number(val);
-                    });
-                    // Sync Current Shift from Cloud
-this.getTenantRef('currentShift').on('value', snap => {
-    const val = snap.val();
-    if (val) this.currentShift = val;
-});
-                    // 10. Sync Realtime Customer Database (CRM)
-this.getTenantRef('customers').on('value', snap => {
-    const val = snap.val();
-    const list = val ? (Array.isArray(val) ? val : Object.values(val)).filter(Boolean) : [];
-    if (list.length > 0) {
-        this.customers = list;
-    } else {
-        this.persistCustomers();
-    }
-});
+                        // 8. Sync Gross Sales
+                        const salesRef = this.getTenantRef('financials/grossSales');
+                        if (salesRef) {
+                            salesRef.on('value', snap => {
+                                try {
+                                    const val = snap.val();
+                                    if (val !== null && val !== undefined) this.financials.grossSales = Number(val);
+                                } catch (err) { console.warn(err); }
+                            });
+                        }
+                    } catch (e) {
+                        console.warn("Firebase listener safe catch:", e);
+                    }
                 },
                 saveConfigToCloud() {
-                    if (this.db) this.getTenantRef('config').set(this.config);
+                    if (this.db) {
+                        const ref = this.getTenantRef('config');
+                        if (ref) ref.set(JSON.parse(JSON.stringify(this.config)));
+                    }
+                    this.saveLocalBackup();
                 },
                 pressPin(n) { if (this.enteredPin.length < 4) this.enteredPin += n; if (this.enteredPin.length === 4) this.submitPin(); },
                 clearPin() { this.enteredPin = ''; },
@@ -2455,10 +2557,14 @@ this.getTenantRef('customers').on('value', snap => {
                         reason: reason
                     });
                     this.cart.splice(idx, 1);
-                    if (this.db) this.getTenantRef('voidLogs').set(this.voidLogs);
+                    if (this.db) {
+                        const ref = this.getTenantRef('voidLogs');
+                        if (ref) ref.set(JSON.parse(JSON.stringify(this.voidLogs)));
+                    }
+                    this.saveLocalBackup();
                 },
                 formatNumber(val) { return Number(val || 0).toLocaleString('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); },
-                getBadgeCount(tabId) { return tabId === 'kitchen' ? this.liveKdsOrders.length : 0; },
+                getBadgeCount(tabId) { return tabId === 'kitchen' ? (this.liveKdsOrders ? this.liveKdsOrders.length : 0) : 0; },
                 openItemNoteModal(item) {
                     this.selectedCartItemForNote = item;
                     this.itemNoteInput = item.note || '';
@@ -2528,7 +2634,8 @@ this.getTenantRef('customers').on('value', snap => {
                     this.liveKdsOrders.push(newKot);
                     if (this.db) {
                         try {
-                            this.getTenantRef('kds_orders').set(this.liveKdsOrders);
+                            const ref = this.getTenantRef('kds_orders');
+                            if (ref) ref.set(JSON.parse(JSON.stringify(this.liveKdsOrders)));
                         } catch (e) { console.warn(e); }
                     }
                     
@@ -2544,7 +2651,8 @@ this.getTenantRef('customers').on('value', snap => {
                     });
                     if (this.db) {
                         try {
-                            this.getTenantRef('ingredients').set(this.ingredients);
+                            const ingRef = this.getTenantRef('ingredients');
+                            if (ingRef) ingRef.set(JSON.parse(JSON.stringify(this.ingredients)));
                         } catch (e) { console.warn(e); }
                     }
                     
@@ -2564,31 +2672,40 @@ this.getTenantRef('customers').on('value', snap => {
                         }
                     }
                     
+                    this.saveLocalBackup();
                     this.triggerToast(`🔥 KOT #${kotId} (${pendingItems.length} New Items) Sent to Kitchen!`);
 
-// Auto Print KOT if enabled
-if (this.config.printing && this.config.printing.autoPrintKOT) {
-    this.printKOTSlip(newKot);
-}
-},
-printKOTSlip(kot) {
-    this.lastKotPrint = JSON.parse(JSON.stringify(kot));
-    setTimeout(() => {
-        const kotEl = document.getElementById('thermal-kot-receipt');
-        const receiptEl = document.getElementById('thermal-receipt');
-        if (kotEl) kotEl.classList.remove('hidden');
-        if (receiptEl) receiptEl.classList.add('hidden');
-        window.print();
-        setTimeout(() => { if (kotEl) kotEl.classList.add('hidden'); }, 500);
-    }, 150);
-},
+                    // Auto Print KOT if enabled
+                    if (this.config.printing && this.config.printing.autoPrintKOT) {
+                        this.printKOTSlip(newKot);
+                    }
+                },
+                printKOTSlip(kot) {
+                    this.lastKotPrint = JSON.parse(JSON.stringify(kot));
+                    setTimeout(() => {
+                        const kotEl = document.getElementById('thermal-kot-receipt');
+                        const receiptEl = document.getElementById('thermal-receipt');
+                        if (kotEl) kotEl.classList.remove('hidden');
+                        if (receiptEl) receiptEl.classList.add('hidden');
+                        window.print();
+                        setTimeout(() => { if (kotEl) kotEl.classList.add('hidden'); }, 500);
+                    }, 150);
+                },
                 completeKOT(kotId) {
                     this.liveKdsOrders = this.liveKdsOrders.filter(k => k.id !== kotId);
-                    if (this.db) this.getTenantRef('kds_orders').set(this.liveKdsOrders);
+                    if (this.db) {
+                        const ref = this.getTenantRef('kds_orders');
+                        if (ref) ref.set(JSON.parse(JSON.stringify(this.liveKdsOrders)));
+                    }
+                    this.saveLocalBackup();
                 },
                 persistPromotions() {
                     const cleanPromos = JSON.parse(JSON.stringify(this.promotions));
-                    if (this.db) this.getTenantRef('promotions').set(cleanPromos);
+                    if (this.db) {
+                        const ref = this.getTenantRef('promotions');
+                        if (ref) ref.set(cleanPromos);
+                    }
+                    this.saveLocalBackup();
                 },
                 openPromoManager() {
                     this.promoForm = { id: null, name: '', type: 'PERCENT', value: 10 };
@@ -2647,225 +2764,264 @@ printKOTSlip(kot) {
                     this.triggerToast("Discount Removed");
                 },
                 printPreBill() {
-        if (this.cart.length === 0) return;
-        this.isPreBill = true;
-        this.lastInvoice = {
-            id: Math.floor(1000 + Math.random() * 9000),
-            date: new Date().toLocaleString(),
-            orderType: this.orderType,
-            table: this.currentTable,
-            customer: JSON.parse(JSON.stringify(this.customer)),
-            items: JSON.parse(JSON.stringify(this.cart)),
-            subtotal: this.cartSubtotal,
-            discountAmount: this.discountAmount,
-            discountReason: this.discount.reason,
-            service: this.serviceCharge,
-            packaging: this.packagingFee,
-            sscl: this.ssclAmount,
-            vat: this.vatAmount,
-            total: this.finalPayable
-        };
-        setTimeout(() => { window.print(); }, 200);
-    },
-    openCheckoutModal() {
-        this.payTab = 'SINGLE';
-        this.cashTendered = this.finalPayable;
-        this.splitPay = { cash: Math.round(this.finalPayable / 2), card: Math.round(this.finalPayable / 2), qr: 0 };
-        this.showCheckout = true;
-        this.$nextTick(() => {
-            const qr = document.getElementById("qrcode-box");
-            if (qr) {
-                qr.innerHTML = "";
-                new QRCode(qr, { text: `LANKAQR|RESTRO|AMOUNT:${this.finalPayable}|CUR:LKR`, width: 110, height: 110 });
-            }
-        });
-    },
-    completePayment(mode) {
-        this.finalizeOrderSettlement({
-            mode: mode,
-            cashPaid: mode === 'CASH' ? this.finalPayable : 0,
-            cardPaid: mode === 'CARD' ? this.finalPayable : 0,
-            qrPaid: mode === 'LANKAQR' ? this.finalPayable : 0,
-            tendered: mode === 'CASH' ? (this.cashTendered || this.finalPayable) : this.finalPayable,
-            change: mode === 'CASH' ? this.cashChangeDue : 0
-        });
-    },
-    completeSplitPayment() {
-        if (this.totalSplitPaid < this.finalPayable) {
-            alert(`තව රු. ${this.formatNumber(this.splitRemaining)} ක් ගෙවිය යුතුය.`);
-            return;
-        }
-        this.finalizeOrderSettlement({
-            mode: 'SPLIT',
-            cashPaid: Number(this.splitPay.cash || 0) - this.cashChangeDue,
-            cardPaid: Number(this.splitPay.card || 0),
-            qrPaid: Number(this.splitPay.qr || 0),
-            tendered: Number(this.splitPay.cash || 0),
-            change: this.cashChangeDue
-        });
-    },
-    finalizeOrderSettlement(payDetails) {
-    this.isPreBill = false;
-    this.saveOrUpdateCustomerProfile();
-    
-    this.lastInvoice = {
-        id: Math.floor(1000 + Math.random() * 9000),
-        date: new Date().toLocaleString(),
-        orderType: this.orderType,
-        table: this.currentTable,
-        customer: JSON.parse(JSON.stringify(this.customer)),
-        items: JSON.parse(JSON.stringify(this.cart)),
-        subtotal: this.cartSubtotal,
-        discountAmount: this.discountAmount,
-        discountReason: this.discount.reason,
-        service: this.serviceCharge,
-        packaging: this.packagingFee,
-        sscl: this.ssclAmount,
-        vat: this.vatAmount,
-        total: this.finalPayable,
-        payMode: payDetails.mode,
-        cashPaid: payDetails.cashPaid,
-        cardPaid: payDetails.cardPaid,
-        qrPaid: payDetails.qrPaid,
-        tendered: payDetails.tendered,
-        change: payDetails.change
-    };
-    
-    this.currentShift.cashSales += Math.max(0, payDetails.cashPaid);
-    this.currentShift.cardSales += Math.max(0, payDetails.cardPaid);
-    this.currentShift.qrSales += Math.max(0, payDetails.qrPaid);
-    this.currentShift.totalSales += this.finalPayable;
-    this.financials.grossSales += this.finalPayable;
-    
-    // Sync Financials & Shift to Cloud immediately
-    if (this.db) {
-        try {
-            this.getTenantRef('financials/grossSales').set(this.financials.grossSales);
-            this.getTenantRef('currentShift').set(this.currentShift);
-        } catch (e) {}
-    }
-    this.saveLocalBackup();
-    
-    if (this.orderType === 'Dine-In' && this.currentTable) {
-        const tbl = this.tables.find(t => t.name === this.currentTable);
-        if (tbl) {
-            tbl.status = 'Available';
-            tbl.activeCart = [];
-            tbl.discount = { type: 'NONE', rate: 0, amount: 0, reason: '' };
-            tbl.currentBill = 0;
-            tbl.openedTime = null;
-            this.persistTables();
-        }
-        this.currentTable = '';
-    }
-    
-    this.showCheckout = false;
-    this.cart = [];
-    this.discount = { type: 'NONE', rate: 0, amount: 0, reason: '' };
-    this.clearCustomer();
-    this.saveLocalBackup();
-    this.triggerToast("✓ Bill Settled Successfully!");
-    setTimeout(() => { window.print(); }, 300);
-},
+                    if (this.cart.length === 0) return;
+                    this.isPreBill = true;
+                    this.lastInvoice = {
+                        id: Math.floor(1000 + Math.random() * 9000),
+                        date: new Date().toLocaleString(),
+                        orderType: this.orderType,
+                        table: this.currentTable,
+                        customer: JSON.parse(JSON.stringify(this.customer)),
+                        items: JSON.parse(JSON.stringify(this.cart)),
+                        subtotal: this.cartSubtotal,
+                        discountAmount: this.discountAmount,
+                        discountReason: this.discount.reason,
+                        service: this.serviceCharge,
+                        packaging: this.packagingFee,
+                        sscl: this.ssclAmount,
+                        vat: this.vatAmount,
+                        total: this.finalPayable
+                    };
+                    setTimeout(() => {
+                        const kotEl = document.getElementById('thermal-kot-receipt');
+                        const receiptEl = document.getElementById('thermal-receipt');
+                        if (kotEl) kotEl.classList.add('hidden');
+                        if (receiptEl) receiptEl.classList.remove('hidden');
+                        window.print();
+                    }, 200);
+                },
+                openCheckoutModal() {
+                    this.payTab = 'SINGLE';
+                    this.cashTendered = this.finalPayable;
+                    this.splitPay = { cash: Math.round(this.finalPayable / 2), card: Math.round(this.finalPayable / 2), qr: 0 };
+                    this.showCheckout = true;
+                    this.$nextTick(() => {
+                        const qr = document.getElementById("qrcode-box");
+                        if (qr) {
+                            qr.innerHTML = "";
+                            new QRCode(qr, { text: `LANKAQR|RESTRO|AMOUNT:${this.finalPayable}|CUR:LKR`, width: 110, height: 110 });
+                        }
+                    });
+                },
+                completePayment(mode) {
+                    this.finalizeOrderSettlement({
+                        mode: mode,
+                        cashPaid: mode === 'CASH' ? this.finalPayable : 0,
+                        cardPaid: mode === 'CARD' ? this.finalPayable : 0,
+                        qrPaid: mode === 'LANKAQR' ? this.finalPayable : 0,
+                        tendered: mode === 'CASH' ? (this.cashTendered || this.finalPayable) : this.finalPayable,
+                        change: mode === 'CASH' ? this.cashChangeDue : 0
+                    });
+                },
+                completeSplitPayment() {
+                    if (this.totalSplitPaid < this.finalPayable) {
+                        alert(`තව රු. ${this.formatNumber(this.splitRemaining)} ක් ගෙවිය යුතුය.`);
+                        return;
+                    }
+                    this.finalizeOrderSettlement({
+                        mode: 'SPLIT',
+                        cashPaid: Number(this.splitPay.cash || 0) - this.cashChangeDue,
+                        cardPaid: Number(this.splitPay.card || 0),
+                        qrPaid: Number(this.splitPay.qr || 0),
+                        tendered: Number(this.splitPay.cash || 0),
+                        change: this.cashChangeDue
+                    });
+                },
+                finalizeOrderSettlement(payDetails) {
+                    this.isPreBill = false;
+                    this.saveOrUpdateCustomerProfile();
+                    
+                    this.lastInvoice = {
+                        id: Math.floor(1000 + Math.random() * 9000),
+                        date: new Date().toLocaleString(),
+                        orderType: this.orderType,
+                        table: this.currentTable,
+                        customer: JSON.parse(JSON.stringify(this.customer)),
+                        items: JSON.parse(JSON.stringify(this.cart)),
+                        subtotal: this.cartSubtotal,
+                        discountAmount: this.discountAmount,
+                        discountReason: this.discount.reason,
+                        service: this.serviceCharge,
+                        packaging: this.packagingFee,
+                        sscl: this.ssclAmount,
+                        vat: this.vatAmount,
+                        total: this.finalPayable,
+                        payMode: payDetails.mode,
+                        cashPaid: payDetails.cashPaid,
+                        cardPaid: payDetails.cardPaid,
+                        qrPaid: payDetails.qrPaid,
+                        tendered: payDetails.tendered,
+                        change: payDetails.change
+                    };
+                    
+                    this.currentShift.cashSales += Math.max(0, payDetails.cashPaid);
+this.currentShift.cardSales += Math.max(0, payDetails.cardPaid);
+this.currentShift.qrSales += Math.max(0, payDetails.qrPaid);
+this.currentShift.totalSales += this.finalPayable;
+this.financials.grossSales += this.finalPayable;
+
+// Record to Sales History
+this.salesHistory.unshift({
+    id: this.lastInvoice.id,
+    date: new Date().toLocaleTimeString(),
+    orderType: this.orderType,
+    table: this.currentTable || '-',
+    staff: this.currentUser.name,
+    total: this.finalPayable,
+    payMode: payDetails.mode,
+    itemsCount: this.cart.reduce((s, i) => s + i.qty, 0)
+});
+                    if (this.db) {
+                        try {
+                            const salesRef = this.getTenantRef('financials/grossSales');
+                            if (salesRef) salesRef.set(this.financials.grossSales);
+                            const shiftRef = this.getTenantRef('currentShift');
+                            if (shiftRef) shiftRef.set(JSON.parse(JSON.stringify(this.currentShift)));
+                        } catch (e) {}
+                    }
+                    this.saveLocalBackup();
+                    
+                    if (this.orderType === 'Dine-In' && this.currentTable) {
+                        const tbl = this.tables.find(t => t.name === this.currentTable);
+                        if (tbl) {
+                            tbl.status = 'Available';
+                            tbl.activeCart = [];
+                            tbl.discount = { type: 'NONE', rate: 0, amount: 0, reason: '' };
+                            tbl.currentBill = 0;
+                            tbl.openedTime = null;
+                            this.persistTables();
+                        }
+                        this.currentTable = '';
+                    }
+                    
+                    this.showCheckout = false;
+                    this.cart = [];
+                    this.discount = { type: 'NONE', rate: 0, amount: 0, reason: '' };
+                    this.clearCustomer();
+                    this.saveLocalBackup();
+                    this.triggerToast("✓ Bill Settled Successfully!");
+                    
+                    if (this.config.printing && this.config.printing.autoPrintBill) {
+                        setTimeout(() => {
+                            const kotEl = document.getElementById('thermal-kot-receipt');
+                            const receiptEl = document.getElementById('thermal-receipt');
+                            if (kotEl) kotEl.classList.add('hidden');
+                            if (receiptEl) receiptEl.classList.remove('hidden');
+                            window.print();
+                        }, 300);
+                    }
+                },
                 restockItem(ing) {
                     ing.stock += 10;
-                    if (this.db) this.getTenantRef('ingredients').set(this.ingredients);
+                    if (this.db) {
+                        const ref = this.getTenantRef('ingredients');
+                        if (ref) ref.set(JSON.parse(JSON.stringify(this.ingredients)));
+                    }
+                    this.saveLocalBackup();
                 },
                 openShiftModal() {
                     this.denominations = { 5000: 0, 1000: 0, 500: 0, 100: 0, 50: 0, 20: 0, coins: 0 };
                     this.showShiftModal = true;
                 },
                 openPettyCashModal() {
-        this.pettyCashForm = { type: 'OUT', amount: null, category: 'Supplies & Grocery', reason: '', pin: '' };
-        this.showPettyCashModal = true;
-    },
-    submitPettyCash() {
-        const amt = Number(this.pettyCashForm.amount || 0);
-        if (amt <= 0) { alert("Please enter a valid amount!"); return; }
-        if (!this.pettyCashForm.reason.trim()) { alert("Please enter reason/description!"); return; }
-        
-        const authUser = this.users.find(u => u.pin === this.pettyCashForm.pin);
-        if (!authUser) { alert("Invalid Security PIN!"); return; }
-        
-        if (!this.currentShift.cashIn) this.currentShift.cashIn = 0;
-        if (!this.currentShift.cashOut) this.currentShift.cashOut = 0;
-        
-        if (this.pettyCashForm.type === 'IN') {
-            this.currentShift.cashIn += amt;
-        } else {
-            this.currentShift.cashOut += amt;
-        }
-        
-        const logEntry = {
-            id: Date.now(),
-            time: new Date().toLocaleTimeString(),
-            type: this.pettyCashForm.type,
-            amount: amt,
-            category: this.pettyCashForm.type === 'OUT' ? this.pettyCashForm.category : 'Drawer Top-up',
-            reason: this.pettyCashForm.reason.trim(),
-            authorizedBy: authUser.name
-        };
-        
-        this.pettyCashLogs.unshift(logEntry);
-        if (this.db) {
-            try {
-                this.getTenantRef('currentShift').set(this.currentShift);
-                this.getTenantRef('pettyCashLogs').set(this.pettyCashLogs);
-            } catch (e) {}
-        }
-        this.saveLocalBackup();
-        this.showPettyCashModal = false;
-        this.triggerToast(`✓ Petty Cash ${this.pettyCashForm.type === 'IN' ? 'Cash-In' : 'Cash-Out'} (Rs. ${this.formatNumber(amt)}) Recorded!`);
-    },
-    finalizeShiftClose() {
-        const shiftId = (this.currentShift && this.currentShift.id) ? this.currentShift.id : 101;
-        const cashierName = (this.currentUser && this.currentUser.name) ? this.currentUser.name : 'Staff';
-        const cashSales = (this.currentShift && this.currentShift.cashSales) ? this.currentShift.cashSales : 0;
-        const cashIn = (this.currentShift && this.currentShift.cashIn) ? this.currentShift.cashIn : 0;
-        const cashOut = (this.currentShift && this.currentShift.cashOut) ? this.currentShift.cashOut : 0;
-        const cardSales = (this.currentShift && this.currentShift.cardSales) ? this.currentShift.cardSales : 0;
-        const qrSales = (this.currentShift && this.currentShift.qrSales) ? this.currentShift.qrSales : 0;
-        const totalSales = (this.currentShift && this.currentShift.totalSales) ? this.currentShift.totalSales : 0;
-        const netExpected = this.expectedDrawerCash;
-        const currentVariance = this.cashVariance;
-        
-        const shiftReport = {
-            shiftId: shiftId,
-            cashier: cashierName,
-            closeTime: new Date().toLocaleString(),
-            cashSales: cashSales,
-            cashIn: cashIn,
-            cashOut: cashOut,
-            expectedCash: netExpected,
-            actualCash: this.countedDrawerCash,
-            variance: currentVariance,
-            cardSales: cardSales,
-            qrSales: qrSales,
-            totalGross: totalSales,
-            denominations: this.denominations ? JSON.parse(JSON.stringify(this.denominations)) : {}
-        };
-        
-        if (this.db) {
-            try { this.getTenantRef(`z_reports/shift_${shiftId}`).set(shiftReport); } catch (e) {}
-        }
-        
-        this.showShiftModal = false;
-        this.currentShift = {
-            id: Number(shiftId) + 1,
-            startTime: new Date().toLocaleTimeString(),
-            cashSales: 0,
-            cashIn: 0,
-            cashOut: 0,
-            cardSales: 0,
-            qrSales: 0,
-            totalSales: 0
-        };
-        if (this.db) {
-            try { this.getTenantRef('currentShift').set(this.currentShift); } catch (e) {}
-        }
-        this.saveLocalBackup();
-        this.triggerToast(`✓ Shift #${shiftId} Closed! Variance: Rs. ${this.formatNumber(currentVariance)}`);
-    },
+                    this.pettyCashForm = { type: 'OUT', amount: null, category: 'Supplies & Grocery', reason: '', pin: '' };
+                    this.showPettyCashModal = true;
+                },
+                submitPettyCash() {
+                    const amt = Number(this.pettyCashForm.amount || 0);
+                    if (amt <= 0) { alert("Please enter a valid amount!"); return; }
+                    if (!this.pettyCashForm.reason.trim()) { alert("Please enter reason/description!"); return; }
+                    
+                    const authUser = this.users.find(u => u.pin === this.pettyCashForm.pin);
+                    if (!authUser) { alert("Invalid Security PIN!"); return; }
+                    
+                    if (!this.currentShift.cashIn) this.currentShift.cashIn = 0;
+                    if (!this.currentShift.cashOut) this.currentShift.cashOut = 0;
+                    
+                    if (this.pettyCashForm.type === 'IN') {
+                        this.currentShift.cashIn += amt;
+                    } else {
+                        this.currentShift.cashOut += amt;
+                    }
+                    
+                    const logEntry = {
+                        id: Date.now(),
+                        time: new Date().toLocaleTimeString(),
+                        type: this.pettyCashForm.type,
+                        amount: amt,
+                        category: this.pettyCashForm.type === 'OUT' ? this.pettyCashForm.category : 'Drawer Top-up',
+                        reason: this.pettyCashForm.reason.trim(),
+                        authorizedBy: authUser.name
+                    };
+                    
+                    this.pettyCashLogs.unshift(logEntry);
+                    if (this.db) {
+                        try {
+                            const sRef = this.getTenantRef('currentShift');
+                            if (sRef) sRef.set(JSON.parse(JSON.stringify(this.currentShift)));
+                            const pRef = this.getTenantRef('pettyCashLogs');
+                            if (pRef) pRef.set(JSON.parse(JSON.stringify(this.pettyCashLogs)));
+                        } catch (e) {}
+                    }
+                    this.saveLocalBackup();
+                    this.showPettyCashModal = false;
+                    this.triggerToast(`✓ Petty Cash ${this.pettyCashForm.type === 'IN' ? 'Cash-In' : 'Cash-Out'} (Rs. ${this.formatNumber(amt)}) Recorded!`);
+                },
+                finalizeShiftClose() {
+                    const shiftId = (this.currentShift && this.currentShift.id) ? this.currentShift.id : 101;
+                    const cashierName = (this.currentUser && this.currentUser.name) ? this.currentUser.name : 'Staff';
+                    const cashSales = (this.currentShift && this.currentShift.cashSales) ? this.currentShift.cashSales : 0;
+                    const cashIn = (this.currentShift && this.currentShift.cashIn) ? this.currentShift.cashIn : 0;
+                    const cashOut = (this.currentShift && this.currentShift.cashOut) ? this.currentShift.cashOut : 0;
+                    const cardSales = (this.currentShift && this.currentShift.cardSales) ? this.currentShift.cardSales : 0;
+                    const qrSales = (this.currentShift && this.currentShift.qrSales) ? this.currentShift.qrSales : 0;
+                    const totalSales = (this.currentShift && this.currentShift.totalSales) ? this.currentShift.totalSales : 0;
+                    const netExpected = this.expectedDrawerCash;
+                    const currentVariance = this.cashVariance;
+                    
+                    const shiftReport = {
+                        shiftId: shiftId,
+                        cashier: cashierName,
+                        closeTime: new Date().toLocaleString(),
+                        cashSales: cashSales,
+                        cashIn: cashIn,
+                        cashOut: cashOut,
+                        expectedCash: netExpected,
+                        actualCash: this.countedDrawerCash,
+                        variance: currentVariance,
+                        cardSales: cardSales,
+                        qrSales: qrSales,
+                        totalGross: totalSales,
+                        denominations: this.denominations ? JSON.parse(JSON.stringify(this.denominations)) : {}
+                    };
+                    
+                    if (this.db) {
+                        try {
+                            const zRef = this.getTenantRef(`z_reports/shift_${shiftId}`);
+                            if (zRef) zRef.set(shiftReport);
+                        } catch (e) {}
+                    }
+                    
+                    this.showShiftModal = false;
+                    this.currentShift = {
+                        id: Number(shiftId) + 1,
+                        startTime: new Date().toLocaleTimeString(),
+                        cashSales: 0,
+                        cashIn: 0,
+                        cashOut: 0,
+                        cardSales: 0,
+                        qrSales: 0,
+                        totalSales: 0
+                    };
+                    if (this.db) {
+                        try {
+                            const sRef = this.getTenantRef('currentShift');
+                            if (sRef) sRef.set(JSON.parse(JSON.stringify(this.currentShift)));
+                        } catch (e) {}
+                    }
+                    this.saveLocalBackup();
+                    this.triggerToast(`✓ Shift #${shiftId} Closed! Variance: Rs. ${this.formatNumber(currentVariance)}`);
+                },
                 openDishModal(dish) {
                     if (dish) {
                         this.dishForm = {
@@ -2898,13 +3054,21 @@ printKOTSlip(kot) {
                         const newId = this.products.length ? Math.max(...this.products.map(p => p.id)) + 1 : 1;
                         this.products.push({ ...this.dishForm, id: newId });
                     }
-                    if (this.db) this.getTenantRef('products').set(this.products);
+                    if (this.db) {
+                        const ref = this.getTenantRef('products');
+                        if (ref) ref.set(JSON.parse(JSON.stringify(this.products)));
+                    }
+                    this.saveLocalBackup();
                     this.showDishModal = false;
                 },
                 deleteDish(id) {
                     if (confirm("Delete dish?")) {
                         this.products = this.products.filter(p => p.id !== id);
-                        if (this.db) this.getTenantRef('products').set(this.products);
+                        if (this.db) {
+                            const ref = this.getTenantRef('products');
+                            if (ref) ref.set(JSON.parse(JSON.stringify(this.products)));
+                        }
+                        this.saveLocalBackup();
                     }
                 },
                 openCategoryModal() { this.showCategoryModal = true; },
@@ -2913,12 +3077,20 @@ printKOTSlip(kot) {
                     if (trimmed && !this.categories.includes(trimmed)) {
                         this.categories.push(trimmed);
                         this.newCategoryInput = '';
-                        if (this.db) this.getTenantRef('categories').set(this.categories);
+                        if (this.db) {
+                            const ref = this.getTenantRef('categories');
+                            if (ref) ref.set(JSON.parse(JSON.stringify(this.categories)));
+                        }
+                        this.saveLocalBackup();
                     }
                 },
                 deleteCategory(idx) {
                     this.categories.splice(idx, 1);
-                    if (this.db) this.getTenantRef('categories').set(this.categories);
+                    if (this.db) {
+                        const ref = this.getTenantRef('categories');
+                        if (ref) ref.set(JSON.parse(JSON.stringify(this.categories)));
+                    }
+                    this.saveLocalBackup();
                 },
                 openTransferModal() {
                     if (this.occupiedTables.length === 0) {
@@ -2954,7 +3126,11 @@ printKOTSlip(kot) {
                 openFloorModal() { this.newFloorInput = ''; this.showFloorModal = true; },
                 persistFloors() {
                     const cleanFloors = JSON.parse(JSON.stringify(this.floors));
-                    if (this.db) this.getTenantRef('floors').set(cleanFloors);
+                    if (this.db) {
+                        const ref = this.getTenantRef('floors');
+                        if (ref) ref.set(cleanFloors);
+                    }
+                    this.saveLocalBackup();
                 },
                 addNewFloor() {
                     const val = this.newFloorInput ? this.newFloorInput.trim() : '';
@@ -2993,22 +3169,25 @@ printKOTSlip(kot) {
                     this.showTableModal = true;
                 },
                 persistTables() {
-    try {
-        const cleanArray = this.tables.map(t => ({
-            id: t.id,
-            name: String(t.name),
-            floor: t.floor || 'Main AC Dining',
-            capacity: Number(t.capacity) || 4,
-            status: t.status || 'Available',
-            activeCart: t.activeCart || [],
-            openedTime: t.openedTime || null,
-            currentBill: Number(t.currentBill) || 0,
-            discount: t.discount || { type: 'NONE', rate: 0, amount: 0, reason: '' }
-        }));
-        if (this.db) this.getTenantRef('tables').set(cleanArray);
-        this.saveLocalBackup();
-    } catch (e) { console.warn(e); }
-},
+                    try {
+                        const cleanArray = this.tables.map(t => ({
+                            id: t.id,
+                            name: String(t.name),
+                            floor: t.floor || 'Main AC Dining',
+                            capacity: Number(t.capacity) || 4,
+                            status: t.status || 'Available',
+                            activeCart: t.activeCart || [],
+                            openedTime: t.openedTime || null,
+                            currentBill: Number(t.currentBill) || 0,
+                            discount: t.discount || { type: 'NONE', rate: 0, amount: 0, reason: '' }
+                        }));
+                        if (this.db) {
+                            const ref = this.getTenantRef('tables');
+                            if (ref) ref.set(cleanArray);
+                        }
+                        this.saveLocalBackup();
+                    } catch (e) { console.warn(e); }
+                },
                 saveTable() {
                     const rawName = this.tableForm.name ? this.tableForm.name.trim() : '';
                     if (!rawName) { alert("Please enter Table Name!"); return; }
@@ -3051,26 +3230,27 @@ printKOTSlip(kot) {
                 }
             },
             watch: {
-        tables: { deep: true, handler() { this.saveLocalBackup(); } },
-        liveKdsOrders: { deep: true, handler() { this.saveLocalBackup(); } },
-        ingredients: { deep: true, handler() { this.saveLocalBackup(); } },
-        voidLogs: { deep: true, handler() { this.saveLocalBackup(); } },
-        currentShift: { deep: true, handler() { this.saveLocalBackup(); } },
-    pettyCashLogs: { deep: true, handler() { this.saveLocalBackup(); } },
+                tables: { deep: true, handler() { this.saveLocalBackup(); } },
+                liveKdsOrders: { deep: true, handler() { this.saveLocalBackup(); } },
+                ingredients: { deep: true, handler() { this.saveLocalBackup(); } },
+                voidLogs: { deep: true, handler() { this.saveLocalBackup(); } },
+                currentShift: { deep: true, handler() { this.saveLocalBackup(); } },
+                pettyCashLogs: { deep: true, handler() { this.saveLocalBackup(); } },
+    salesHistory: { deep: true, handler() { this.saveLocalBackup(); } },
     parkedOrders: { deep: true, handler() { this.saveLocalBackup(); } },
-    financials: { deep: true, handler() { this.saveLocalBackup(); } },
-    customers: { deep: true, handler() { this.saveLocalBackup(); } },
-        products: { deep: true, handler() { this.saveLocalBackup(); } },
-        categories: { deep: true, handler() { this.saveLocalBackup(); } },
-        floors: { deep: true, handler() { this.saveLocalBackup(); } },
-        promotions: { deep: true, handler() { this.saveLocalBackup(); } },
-        config: { deep: true, handler() { this.saveLocalBackup(); } },
-        cart: { deep: true, handler() { this.saveLocalBackup(); } }
-    },
-    mounted() {
-        this.loadLocalBackup();
-        this.initFirebase();
-    }
+                financials: { deep: true, handler() { this.saveLocalBackup(); } },
+                customers: { deep: true, handler() { this.saveLocalBackup(); } },
+                products: { deep: true, handler() { this.saveLocalBackup(); } },
+                categories: { deep: true, handler() { this.saveLocalBackup(); } },
+                floors: { deep: true, handler() { this.saveLocalBackup(); } },
+                promotions: { deep: true, handler() { this.saveLocalBackup(); } },
+                config: { deep: true, handler() { this.saveLocalBackup(); } },
+                cart: { deep: true, handler() { this.saveLocalBackup(); } }
+            },
+            mounted() {
+                this.loadLocalBackup();
+                this.initFirebase();
+            }
         }).mount('#app');
     </script>
 </body>
